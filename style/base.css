@@ -1,0 +1,355 @@
+/*
+    See the JupyterLab Developer Guide for useful CSS Patterns:
+
+    https://jupyterlab.readthedocs.io/en/stable/developer/css.html
+*/
+
+/*
+    See the JupyterLab Developer Guide for useful CSS Patterns:
+
+    https://jupyterlab.readthedocs.io/en/stable/developer/css.html
+*/
+
+.jp-movehub-panel-content {
+  padding: 0 2em;
+  overflow-y: scroll;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--jp-layout-color0);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.vernie-control-grid-container {
+  display: grid;
+  grid-gap: 4px;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: left;
+  align-items: center;
+  margin-top: 20px;
+  gap: 16px;
+  width: 100%;
+}
+
+.lego-build-control-grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 4px;
+  justify-content: left;
+  align-items: center;
+  margin-top: 20px;
+  gap: 16px;
+  width: 100%;
+}
+
+.vernie-control-grid-item-left {
+  justify-self: center;
+  align-items: center;
+}
+
+.vernie-control-grid-item-center {
+  justify-self: center;
+  align-items: center;
+}
+
+.vernie-control-grid-item-right {
+  justify-self: center;
+  align-items: center;
+}
+
+.lego-build-control-grid-item-left {
+  justify-self: center;
+  align-items: center;
+}
+
+.lego-build-control-grid-item-right {
+  justify-self: center;
+  align-items: center;
+}
+
+.move-form-main-container {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 10px;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.move-input-field-text {
+  text-align: left;
+  width: 150px;
+}
+
+.move-input-field {
+  height: 24px;
+  padding: 0 4px;
+  border-width: 0.5px;
+  border-radius: 4px;
+  width: 30px;
+  font-size: 10px;
+  background-color: var(--jp-layout-color2);
+  text-align: right;
+}
+
+.move-input-field-with-2buttons {
+  width: 150px;
+  display: flex;
+  gap: 10px;
+}
+
+.move-validation-button {
+  background-color: var(--jp-accept-color-normal);
+  font-size: 11px;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 60px;
+  height: 24px;
+  padding: 0;
+}
+
+.led-color-main-container {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.led-color-selector-container {
+  width: 150px;
+}
+
+.led-color-text {
+  text-align: left;
+  width: 150px;
+}
+
+.led-color-selector {
+  height: 24px;
+  padding: 0;
+  line-height: 18px;
+  border-radius: 4px;
+  border-color: black;
+  border-width: 0.5px;
+  margin-top: -12px;
+  position: absolute;
+  font-size: 11px;
+  width: 150px;
+  background-color: var(--jp-layout-color2);
+}
+
+.color-selector-container {
+  display: flex;
+  justify-content: right;
+  gap: 10px;
+}
+
+@media (width <= 450px) {
+  /* smaller screens */
+  .move-input-field-text {
+    width: 100px;
+  }
+
+  .move-input-field-with-2buttons {
+    gap: 5px;
+  }
+
+  .move-validation-button {
+    width: 50px;
+  }
+
+  .move-input-field {
+    width: 20px;
+  }
+
+  .vernie-control-grid-container {
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(3, auto);
+  }
+
+  .lego-build-control-grid-container {
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(2, auto);
+  }
+
+  .led-color-text {
+    width: 100px;
+  }
+
+  .led-color-selector {
+    width: 130px;
+  }
+}
+
+@media (width >= 451px) and (width <= 940px) {
+  /* small screens */
+  .vernie-control-grid-container {
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(3, auto);
+  }
+
+  .lego-build-control-grid-container {
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(2, auto);
+  }
+
+  .move-input-field-text {
+    width: 40%;
+  }
+
+  .move-input-field-with-2buttons {
+    width: 60%;
+  }
+
+  .led-color-text {
+    width: 40%;
+  }
+
+  .led-color-selector-container {
+    width: 60%;
+  }
+
+  .led-color-selector {
+    width: 171px;
+  }
+}
+
+@media (width >= 941px) and (width <= 1270px) {
+  /* intermediary screens */
+  .vernie-control-grid-container {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+  }
+
+  .vernie-control-grid-item-right {
+    justify-content: center;
+    grid-column: 1 / -1;
+  }
+}
+
+.manual-control-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 4px;
+  width: 152px;
+  height: 152px;
+}
+
+.manual-control-grid-item {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0 solid;
+}
+
+.image-button {
+  background-color: transparent;
+  border-width: 0;
+  padding: 0;
+  width: 48px;
+}
+
+.colored-circle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  margin: 0 8px;
+  border: solid 0.5px;
+}
+
+.custom-table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-style: solid;
+  border-width: 1.5px;
+  border-radius: 4px;
+  border-color: var(--jp-layout-color0);
+  color: var(--jp-ui-font-color1);
+  font-size: var(--jp-ui-font-size1);
+  margin-top: 16px;
+  margin-bottom: 16px;
+  width: 100%;
+  table-layout: auto;
+}
+
+.custom-table-th {
+  background-color: var(--jp-accept-color-normal);
+  color: white;
+  width: 150px;
+  text-align: center;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 4px;
+  border-color: var(--jp-layout-color0);
+  font-family: var(--jp-content-font-family);
+  font-size: var(--jp-content-font-size1);
+  line-height: var(--jp-content-line-height);
+}
+
+.custom-table-tr {
+  line-height: var(--jp-content-line-height);
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 4px;
+  border-color: var(--jp-layout-color0);
+}
+
+.custom-table-td {
+  width: 150px;
+  text-align: center;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 4px;
+  border-color: var(--jp-layout-color0);
+  font-family: var(--jp-content-font-family);
+  font-size: var(--jp-content-font-size1);
+  line-height: var(--jp-content-line-height);
+  background-color: var(--jp-layout-color2);
+  color: var(--jp-font-color3);
+}
+
+.jp-connection-status-button {
+  width: 29px;
+  height: 29px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jp-connection-status-menu {
+  width: auto;
+  height: auto;
+}
+
+.vernie-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-movehub-id {
+  width: 200px;
+  height: 24px;
+}
+
+.copy-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: solid 0;
+  height: 30px;
+  width: 30px;
+}
+
+ul {
+  padding-left: 0;
+}

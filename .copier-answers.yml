@@ -1,0 +1,17 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v4.6.4
+_src_path: https://github.com/jupyterlab/extension-template
+advanced: false
+author_email: haudin.florence@gmail.com
+author_name: Florence Haudin
+has_ai_rules: false
+has_binder: false
+has_settings: true
+kind: frontend
+labextension_name: jupyter-movehub
+project_short_description: A JupyterLab extension to connect to a Lego Move Hub and
+    drive Legoboost robots.
+python_name: jupyter_movehub
+repository: https://github.com/QuantStack/jupyter-movehub
+test: true
+
