@@ -1,6 +1,6 @@
 import React from 'react';
-import VernieLightSVG from '../style/VernieSchematicLight.svg';
-import VernieDarkSVG from '../style/VernieSchematicDark.svg';
+import VernieLightSVG from '../../../style/images/VernieSchematicLight.svg';
+import VernieDarkSVG from '../../../style/images/VernieSchematicDark.svg';
 const VernieLightSVGUrl = `data:image/svg+xml;base64,${btoa(VernieLightSVG)}`;
 const VernieDarkSVGUrl = `data:image/svg+xml;base64,${btoa(VernieDarkSVG)}`;
 import { IBuildProps } from './MoveHubPanel';

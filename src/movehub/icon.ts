@@ -1,7 +1,7 @@
 import { LabIcon } from '@jupyterlab/ui-components';
-import LegoBrickSvgstr from './style/icons/LegoBrick.svg';
-import GreenCircleSvgstr from './style/green-circle.svg';
-import RedCircleSvgstr from './style/red-circle.svg';
+import LegoBrickSvgstr from '../../style/icons/LegoBrick.svg'
+import GreenCircleSvgstr from '../../style/icons/green-circle.svg';
+import RedCircleSvgstr from '../../style/icons/red-circle.svg';
 
 
 export const LegoBrickIcon = new LabIcon({

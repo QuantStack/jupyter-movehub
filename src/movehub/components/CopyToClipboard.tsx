@@ -1,5 +1,5 @@
 import React from 'react';
-import copySVG from '../style/copy.svg';
+import copySVG from '../../../style/icons/copy.svg';
 const copySVGUrl = `data:image/svg+xml;base64,${btoa(copySVG)}`;
 
 interface ICopyToClipboardProps {

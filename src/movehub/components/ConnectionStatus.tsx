@@ -9,8 +9,8 @@ import { ReactWidget } from '@jupyterlab/ui-components';
 import { Menu } from '@lumino/widgets';
 import { CommandRegistry } from '@lumino/commands';
 import { BluetoothManager } from '@jupyter-bluetooth-manager/bluetooth';
-export const connectMoveHub = 'bluetooth-manager:connect-movehub';
-export const disconnectMoveHub = 'bluetooth-manager:disconnect-movehub';
+export const connectMoveHub = 'jupyter-movehub:connect-movehub';
+export const disconnectMoveHub = 'jupyter-movehub:disconnect-movehub';
 
 export default function ConnectionStatus({ device }: IMoveHubPanelProps) {
   const [deviceState, setDeviceState] = useState<DeviceInfo>(defaultDeviceInfo);

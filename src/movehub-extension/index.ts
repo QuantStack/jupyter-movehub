@@ -18,9 +18,9 @@ import { BatteryWidget } from '../movehub/components/BatteryGauge';
 import { DeviceIdentifierWidget } from '../movehub/components/DeviceIdentifier';
 import { ConnectionStatusWidget } from '../movehub/components/ConnectionStatus';
 export const addLEGOMoveHubControlPanel =
-  'bluetooth-manager:add-lego-movehub-control-panel';
-export const connectMoveHub = 'bluetooth-manager:connect-movehub';
-export const disconnectMoveHub = 'bluetooth-manager:disconnect-movehub';
+  'jupyter-movehub:add-lego-movehub-control-panel';
+export const connectMoveHub = 'jupyter-movehub:connect-movehub';
+export const disconnectMoveHub = 'jupyter-movehub:disconnect-movehub';
 export const moveHubServiceUUID = '00001623-1212-efde-1623-785feabcd123';
 export const moveHubCharacteristicUUID = '00001624-1212-efde-1623-785feabcd123';
 export const movehubRegistryItem: IDeviceTypeRegistryItem = {
@@ -43,7 +43,7 @@ export const movehubRegistryItem: IDeviceTypeRegistryItem = {
 };
 
 const MoveHubRegisterPlugin: JupyterFrontEndPlugin<void> = {
-  id: 'bluetooth-manager:move-hub-register-plugin',
+  id: 'jupyter-movehub:movehub-register-plugin',
   description: 'Registers the move hub device and provides a factory.',
   requires: [IBluetoothManager],
   autoStart: true,
@@ -63,8 +63,8 @@ const MoveHubRegisterPlugin: JupyterFrontEndPlugin<void> = {
   }
 };
 
-const LEGOMoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
-  id: 'bluetooth-manager:lego-movehub-control-panel-plugin',
+const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
+  id: 'jupyter-movehub:movehub-control-panel-plugin',
   description: 'Provides the ui to display informations on the Move Hub state.',
   requires: [ITranslator, IBluetoothManager, IThemeManager],
   autoStart: true,
@@ -179,6 +179,6 @@ const LEGOMoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
 
 const MoveHubExtensionPlugins: JupyterFrontEndPlugin<any>[] = [
   MoveHubRegisterPlugin,
-  LEGOMoveHubControlPanelPlugin
+  MoveHubControlPanelPlugin
 ];
 export default MoveHubExtensionPlugins;

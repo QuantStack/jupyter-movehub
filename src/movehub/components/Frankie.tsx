@@ -1,6 +1,6 @@
 import React from 'react';
-import FrankieLightSVG from '../style/images/FrankieSchematicLight.svg';
-import FrankieDarkSVG from '../style/images/FrankieSchematicDark.svg';
+import FrankieLightSVG from '../../../style/images/FrankieSchematicLight.svg';
+import FrankieDarkSVG from '../../../style/images/FrankieSchematicDark.svg';
 const FrankieLightSVGUrl = `data:image/svg+xml;base64,${btoa(FrankieLightSVG)}`;
 const FrankieDarkSVGUrl = `data:image/svg+xml;base64,${btoa(FrankieDarkSVG)}`;
 import { IBuildProps } from './MoveHubPanel';

@@ -1,6 +1,6 @@
 import React from 'react';
-import MoveHubLightSVG from '../style/MoveHubLight.svg';
-import MoveHubDarkSVG from '../style/MoveHubDark.svg';
+import MoveHubLightSVG from '../../../style/images/MoveHubLight.svg';
+import MoveHubDarkSVG from '../../../style/images/MoveHubDark.svg';
 const MoveHubLightSVGUrl = `data:image/svg+xml;base64,${btoa(MoveHubLightSVG)}`;
 const MoveHubDarkSVGUrl = `data:image/svg+xml;base64,${btoa(MoveHubDarkSVG)}`;
 import { IBuildProps } from './MoveHubPanel';
