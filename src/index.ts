@@ -30,10 +30,4 @@ const plugin: JupyterFrontEndPlugin<void> = {
   }
 };
 
-
-const plugins: JupyterFrontEndPlugin<any>[] = [
-  plugin,
-  ...MoveHubExtensionPlugins
-];
-
-export default plugins;
+export default [plugin, ...MoveHubExtensionPlugins];

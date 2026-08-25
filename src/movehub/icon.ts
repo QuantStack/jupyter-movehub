@@ -1,5 +1,5 @@
 import { LabIcon } from '@jupyterlab/ui-components';
-import LegoBrickSvgstr from '../../style/icons/LegoBrick.svg'
+import LegoBrickSvgstr from '../../style/icons/LegoBrick.svg';
 import GreenCircleSvgstr from '../../style/icons/green-circle.svg';
 import RedCircleSvgstr from '../../style/icons/red-circle.svg';
 
