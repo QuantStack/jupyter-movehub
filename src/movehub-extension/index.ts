@@ -6,6 +6,7 @@ import { ITranslator } from '@jupyterlab/translation';
 import { IThemeManager, MainAreaWidget } from '@jupyterlab/apputils';
 import { Toolbar } from '@jupyterlab/ui-components';
 import {
+  BluetoothManager,
   IDeviceTypeRegistryItem,
   IBluetoothManager
 } from '@jupyter-bluetooth-manager/bluetooth';
@@ -48,7 +49,7 @@ const MoveHubRegisterPlugin: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   activate: (
     app: JupyterFrontEnd,
-    bluetoothManager: IBluetoothManager
+    bluetoothManager: BluetoothManager
   ): void => {
     console.log('JupyterLab move-hub-register plugin is activated!');
     bluetoothManager.deviceTypeRegistry.added.connect(
@@ -70,7 +71,7 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
   activate: (
     app: JupyterFrontEnd,
     translator: ITranslator,
-    bluetoothManager: IBluetoothManager,
+    bluetoothManager: BluetoothManager,
     themeManager: IThemeManager
   ): void => {
     console.log('JupyterLab movehub-control-panel plugin is activated!');
