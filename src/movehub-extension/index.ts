@@ -7,8 +7,7 @@ import { IThemeManager, MainAreaWidget } from '@jupyterlab/apputils';
 import { Toolbar } from '@jupyterlab/ui-components';
 import {
   IDeviceTypeRegistryItem,
-  IBluetoothManager,
-  BluetoothManager
+  IBluetoothManager
 } from '@jupyter-bluetooth-manager/bluetooth';
 import { MoveHub } from '../movehub/moveHub';
 import { LegoBrickIcon } from '../movehub/icon';
@@ -94,7 +93,7 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
           main.addClass('jp-movehub-panel-main');
           main.toolbar.addItem(
             'connection-status',
-            new ConnectionStatusWidget(device, bluetoothManager, app.commands)
+            new ConnectionStatusWidget(device, app.commands)
           );
           main.toolbar.addItem(
             'select-lego-model',
