@@ -84,7 +84,7 @@ export class MoveHub extends BluetoothManager.Device {
     };
     this.contextCommands = [
       'jupyter-movehub:disconnect-device',
-      'jupyter-movehub:add-lego-movehub-control-panel'
+      'jupyter-movehub:add-movehub-control-panel'
     ];
     this.isConnected = false;
   }
