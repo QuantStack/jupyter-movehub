@@ -22,8 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
 ]
-dependencies = [jupyter-bluetooth-manager
-]
+dependencies = ["jupyter-bluetooth-manager>=0.2.0"]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
 [project.optional-dependencies]
