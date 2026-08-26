@@ -33,7 +33,6 @@ SOFTWARE.
  * @author   Feross Aboukhadijeh <https://feross.org>
  * @license  MIT
  */
-/* eslint-disable no-proto */
 
 'use strict';
 
@@ -93,7 +92,7 @@ function typedArraySupport() {
 Object.defineProperty(Buffer.prototype, 'parent', {
   enumerable: true,
   get: function () {
-    const that =  this as BufferSource;
+    const that = this as BufferSource;
     if (!Buffer.isBuffer(that)) {
       return undefined;
     }
@@ -394,7 +393,6 @@ function checked(length: number) {
 
 function SlowBuffer(length: number) {
   if (+length !== length) {
-    // eslint-disable-line eqeqeq
     length = 0;
   }
   // @ts-expect-error To be fixed
@@ -589,7 +587,7 @@ function slowToString(encoding: any, start: number, end: number) {
   if (!encoding) {
     encoding = 'utf8';
   }
-  // eslint-disable-next-line no-constant-condition
+
   while (true) {
     switch (encoding) {
       case 'hex':
@@ -2323,7 +2321,7 @@ function isInstance(obj: any, type: any) {
 }
 function numberIsNaN(obj: any) {
   // For IE11 support
-  return obj !== obj; // eslint-disable-line no-self-compare
+  return obj !== obj;
 }
 
 export { Buffer, SlowBuffer, INSPECT_MAX_BYTES, kMaxLength };

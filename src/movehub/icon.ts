@@ -3,7 +3,6 @@ import LegoBrickSvgstr from '../../style/icons/LegoBrick.svg';
 import GreenCircleSvgstr from '../../style/icons/green-circle.svg';
 import RedCircleSvgstr from '../../style/icons/red-circle.svg';
 
-
 export const LegoBrickIcon = new LabIcon({
   name: '@jupyterlab/bluetooh-manager:bluetooth-lego-brick',
   svgstr: LegoBrickSvgstr

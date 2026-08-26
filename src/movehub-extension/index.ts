@@ -49,7 +49,7 @@ const MoveHubRegisterPlugin: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   activate: (
     app: JupyterFrontEnd,
-    bluetoothManager: BluetoothManager
+    bluetoothManager: IBluetoothManager
   ): void => {
     console.log('JupyterLab move-hub-register plugin is activated!');
     bluetoothManager.deviceTypeRegistry.added.connect(
@@ -71,7 +71,7 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
   activate: (
     app: JupyterFrontEnd,
     translator: ITranslator,
-    bluetoothManager: BluetoothManager,
+    bluetoothManager: IBluetoothManager,
     themeManager: IThemeManager
   ): void => {
     console.log('JupyterLab lego-movehub-control-panel plugin is activated!');

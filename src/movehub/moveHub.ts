@@ -3,7 +3,10 @@ import { BluetoothManager } from '@jupyter-bluetooth-manager/bluetooth';
 import { HubControl } from './moveHub/hub-control';
 import { IDeviceConfiguration, DEFAULT_CONFIG } from './moveHub/hub/hubAsync';
 import { ControlData, DeviceInfo, RawData } from './moveHub/types';
-import { moveHubCharacteristicUUID, moveHubServiceUUID } from '../movehub-extension';
+import {
+  moveHubCharacteristicUUID,
+  moveHubServiceUUID
+} from '../movehub-extension';
 import { buildCompleteIdentifier } from '@jupyter-bluetooth-manager/bluetooth';
 import { ObservableValue } from '@jupyterlab/observables';
 
@@ -66,8 +69,8 @@ export class MoveHub extends BluetoothManager.Device {
       state: undefined
     };
 
-    (this.deviceInfo = defaultDeviceInfo),
-      (this.legoBuild = new ObservableValue('Move Hub'));
+    this.deviceInfo = defaultDeviceInfo;
+    this.legoBuild = new ObservableValue('Move Hub');
 
     this.defaultConfiguration = {
       distanceModifier: DEFAULT_CONFIG.METRIC_MODIFIER,
