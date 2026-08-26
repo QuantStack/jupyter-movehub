@@ -73,7 +73,7 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
     bluetoothManager: IBluetoothManager,
     themeManager: IThemeManager
   ): void => {
-    console.log('JupyterLab lego-movehub-control-panel plugin is activated!');
+    console.log('JupyterLab movehub-control-panel plugin is activated!');
     const trans = translator.load('jupyterlab');
 
     app.commands.addCommand(addLEGOMoveHubControlPanel, {
