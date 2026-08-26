@@ -17,8 +17,8 @@ import { LegoBuildSelectorWidget } from '../movehub/components/LegoBuildSelector
 import { BatteryWidget } from '../movehub/components/BatteryGauge';
 import { DeviceIdentifierWidget } from '../movehub/components/DeviceIdentifier';
 import { ConnectionStatusWidget } from '../movehub/components/ConnectionStatus';
-export const addLEGOMoveHubControlPanel =
-  'jupyter-movehub:add-lego-movehub-control-panel';
+export const addMoveHubControlPanel =
+  'jupyter-movehub:add-movehub-control-panel';
 export const connectMoveHub = 'jupyter-movehub:connect-movehub';
 export const disconnectMoveHub = 'jupyter-movehub:disconnect-movehub';
 export const moveHubServiceUUID = '00001623-1212-efde-1623-785feabcd123';
@@ -77,7 +77,7 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
     console.log('JupyterLab movehub-control-panel plugin is activated!');
     const trans = translator.load('jupyterlab');
 
-    app.commands.addCommand(addLEGOMoveHubControlPanel, {
+    app.commands.addCommand(addMoveHubControlPanel, {
       execute: args => {
         const result = bluetoothManager.deviceList.filter(
           device => device instanceof MoveHub
