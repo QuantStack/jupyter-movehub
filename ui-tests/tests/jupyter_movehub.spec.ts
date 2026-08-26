@@ -1,5 +1,4 @@
 import { expect, test } from '@jupyterlab/galata';
-import { ConsoleMessage, Page } from '@playwright/test';
 
 /**
  * Don't load JupyterLab webpage before running the tests.
@@ -7,18 +6,14 @@ import { ConsoleMessage, Page } from '@playwright/test';
  */
 test.use({ autoGoto: false });
 
-test('should emit an activation console message', async ({
-  page
-}: {
-  page: Page;
-}) => {
+test('should emit an activation console message', async ({ page }) => {
   const logs: string[] = [];
 
-  page.on('console', (message: ConsoleMessage) => {
+  page.on('console', message => {
     logs.push(message.text());
   });
 
-  await page.goto('./lab');
+  await page.goto();
 
   expect(
     logs.filter(s => s === 'JupyterLab extension jupyter-movehub is activated!')
