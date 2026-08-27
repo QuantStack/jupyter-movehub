@@ -12,4 +12,4 @@ export const MODULE_VERSION = '0.1.0';
 /*
  * The current package name.
  */
-export const MODULE_NAME = 'ipymovehub';
+export const MODULE_NAME = 'ipymovehub-widget';
