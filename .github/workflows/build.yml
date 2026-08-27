@@ -34,7 +34,7 @@ jobs:
       run: |
         set -eux
         jlpm run test
-
+    
     - name: Build the extension
       run: |
         set -eux

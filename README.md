@@ -1,7 +1,5 @@
 # jupyter_movehub
 
-[![Github Actions Status](https://github.com/QuantStack/jupyter-movehub/workflows/Build/badge.svg)](https://github.com/QuantStack/jupyter-movehub/actions/workflows/build.yml)
-
 A JupyterLab extension to connect to a Lego Move Hub and drive Legoboost robots.
 
 ## Requirements

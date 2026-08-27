@@ -62,7 +62,7 @@ export class EventEmitter<T extends string> {
       this.events[event].splice(0, this.events[event].length)
     );
   }
-  /*eslint-disable prefer-spread */
+
   public emit(event: string, ...args: any[]): void {
     if (typeof this.events[event] !== 'object') {
       return;

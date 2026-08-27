@@ -5,7 +5,7 @@ import arrowUpSVG from '../../../style/icons/arrow-up.svg';
 import arrowDownSVG from '../../../style/icons/arrow-down.svg';
 import turnRightSVG from '../../../style/icons/turn-right.svg';
 import turnLeftSVG from '../../../style/icons/turn-left.svg';
-import emptyLightSVG from '../../../style/icons/emptyLight.svg';
+import emptyLightSVG from '../../..//style/icons/emptyLight.svg';
 import emptyDarkSVG from '../../../style/icons/emptyDark.svg';
 import stopSVG from '../../../style/icons/stop.svg';
 const emptyLightSVGUrl = `data:image/svg+xml;base64,${btoa(emptyLightSVG)}`;

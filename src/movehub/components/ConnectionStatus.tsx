@@ -8,7 +8,6 @@ import { defaultDeviceInfo, MoveHub } from '../moveHub';
 import { ReactWidget } from '@jupyterlab/ui-components';
 import { Menu } from '@lumino/widgets';
 import { CommandRegistry } from '@lumino/commands';
-import { BluetoothManager } from '@jupyter-bluetooth-manager/bluetooth';
 export const connectMoveHub = 'jupyter-movehub:connect-movehub';
 export const disconnectMoveHub = 'jupyter-movehub:disconnect-movehub';
 
@@ -47,11 +46,7 @@ export class ConnectionStatusWidget extends ReactWidget {
   public device: MoveHub;
   public menu: Menu;
 
-  constructor(
-    device: MoveHub,
-    bluetoothManager: BluetoothManager,
-    commands: CommandRegistry
-  ) {
+  constructor(device: MoveHub, commands: CommandRegistry) {
     super();
     this.device = device;
     const deviceID = this.device.native.id;

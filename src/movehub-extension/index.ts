@@ -6,9 +6,9 @@ import { ITranslator } from '@jupyterlab/translation';
 import { IThemeManager, MainAreaWidget } from '@jupyterlab/apputils';
 import { Toolbar } from '@jupyterlab/ui-components';
 import {
+  BluetoothManager,
   IDeviceTypeRegistryItem,
-  IBluetoothManager,
-  BluetoothManager
+  IBluetoothManager
 } from '@jupyter-bluetooth-manager/bluetooth';
 import { MoveHub } from '../movehub/moveHub';
 import { LegoBrickIcon } from '../movehub/icon';
@@ -17,8 +17,8 @@ import { LegoBuildSelectorWidget } from '../movehub/components/LegoBuildSelector
 import { BatteryWidget } from '../movehub/components/BatteryGauge';
 import { DeviceIdentifierWidget } from '../movehub/components/DeviceIdentifier';
 import { ConnectionStatusWidget } from '../movehub/components/ConnectionStatus';
-export const addLEGOMoveHubControlPanel =
-  'jupyter-movehub:add-lego-movehub-control-panel';
+export const addMoveHubControlPanel =
+  'jupyter-movehub:add-movehub-control-panel';
 export const connectMoveHub = 'jupyter-movehub:connect-movehub';
 export const disconnectMoveHub = 'jupyter-movehub:disconnect-movehub';
 export const moveHubServiceUUID = '00001623-1212-efde-1623-785feabcd123';
@@ -74,10 +74,10 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
     bluetoothManager: BluetoothManager,
     themeManager: IThemeManager
   ): void => {
-    console.log('JupyterLab lego-movehub-control-panel plugin is activated!');
+    console.log('JupyterLab movehub-control-panel plugin is activated!');
     const trans = translator.load('jupyterlab');
 
-    app.commands.addCommand(addLEGOMoveHubControlPanel, {
+    app.commands.addCommand(addMoveHubControlPanel, {
       execute: args => {
         const result = bluetoothManager.deviceList.filter(
           device => device instanceof MoveHub
@@ -94,7 +94,7 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
           main.addClass('jp-movehub-panel-main');
           main.toolbar.addItem(
             'connection-status',
-            new ConnectionStatusWidget(device, bluetoothManager, app.commands)
+            new ConnectionStatusWidget(device, app.commands)
           );
           main.toolbar.addItem(
             'select-lego-model',

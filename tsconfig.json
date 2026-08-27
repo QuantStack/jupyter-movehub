@@ -6,11 +6,7 @@
     "esModuleInterop": true,
     "incremental": true,
     "jsx": "react",
-    "lib": [
-      "DOM",
-      "ES2018",
-      "ES2020.Intl"
-    ],
+    "lib": ["DOM", "ES2018", "ES2020.Intl"],
     "module": "esnext",
     "moduleResolution": "node",
     "noEmitOnError": true,
@@ -23,17 +19,10 @@
     "strict": true,
     "strictNullChecks": true,
     "target": "ES2018",
-    "types": [
-      "jest",
-      "web-bluetooth"
-    ],
+    "types": ["jest", "web-bluetooth"],
     "strictPropertyInitialization": false,
-    "noImplicitThis": false,
+    "noImplicitThis": false
   },
-  "exclude": [
-    "ui-tests"
-  ],
-   "include": [
-    "src/**/*"
-  ],
+  "exclude": ["ui-tests"],
+  "include": ["src/**/*"]
 }
