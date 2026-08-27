@@ -50,13 +50,13 @@ jobs:
 
         pip install build
         python -m build
-        pip uninstall -y "jupyter_movehub" jupyterlab
+        pip uninstall -y "ipymovehub" jupyterlab
 
     - name: Upload extension packages
       uses: actions/upload-artifact@v4
       with:
         name: extension-artifacts
-        path: dist/jupyter_movehub*
+        path: dist/ipymovehub*
         if-no-files-found: error
 
   test_isolated:
@@ -79,7 +79,7 @@ jobs:
         sudo rm -rf $(which node)
         sudo rm -rf $(which node)
 
-        pip install "jupyterlab>=4.0.0,<5" jupyter_movehub*.whl
+        pip install "jupyterlab>=4.0.0,<5" ipymovehub*.whl
 
 
         jupyter labextension list
@@ -109,7 +109,7 @@ jobs:
     - name: Install the extension
       run: |
         set -eux
-        python -m pip install "jupyterlab>=4.0.0,<5" jupyter_movehub*.whl
+        python -m pip install "jupyterlab>=4.0.0,<5" ipymovehub*.whl
 
     - name: Install dependencies
       working-directory: ui-tests
@@ -140,7 +140,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: jupyter_movehub-playwright-tests
+        name: ipymovehub-playwright-tests
         path: |
           ui-tests/test-results
           ui-tests/playwright-report

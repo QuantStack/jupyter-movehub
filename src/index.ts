@@ -5,7 +5,6 @@ import {
 
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import MoveHubExtensionPlugins from './movehub-extension';
-
 /**
  * Initialization data for the jupyter-movehub extension.
  */

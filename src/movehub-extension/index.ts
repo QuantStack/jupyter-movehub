@@ -17,6 +17,7 @@ import { LegoBuildSelectorWidget } from '../movehub/components/LegoBuildSelector
 import { BatteryWidget } from '../movehub/components/BatteryGauge';
 import { DeviceIdentifierWidget } from '../movehub/components/DeviceIdentifier';
 import { ConnectionStatusWidget } from '../movehub/components/ConnectionStatus';
+import ipymovehubPlugin from './plugin';
 export const addMoveHubControlPanel =
   'jupyter-movehub:add-movehub-control-panel';
 export const connectMoveHub = 'jupyter-movehub:connect-movehub';
@@ -179,6 +180,6 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
 
 const MoveHubExtensionPlugins: JupyterFrontEndPlugin<any>[] = [
   MoveHubRegisterPlugin,
-  MoveHubControlPanelPlugin
+  MoveHubControlPanelPlugin, ipymovehubPlugin
 ];
 export default MoveHubExtensionPlugins;

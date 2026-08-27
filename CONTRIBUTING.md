@@ -12,7 +12,7 @@ The `jlpm` command is JupyterLab's pinned version of
 
 ```bash
 # Clone the repo to your local environment
-# Change directory to the jupyter_movehub directory
+# Change directory to the ipymovehub directory
 
 # Set up a virtual environment and install package in development mode
 python -m venv .venv
@@ -48,7 +48,7 @@ jupyter lab build --minimize=False
 ## Development uninstall
 
 ```bash
-pip uninstall jupyter_movehub
+pip uninstall ipymovehub
 ```
 
 In development mode, you will also need to remove the symlink created by `jupyter-builder develop`

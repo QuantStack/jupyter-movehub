@@ -87,6 +87,7 @@ export class MoveHubModel extends DOMWidgetModel {
     super.initialize(attributes, options);
     const name: string = this.get('name');
     console.log(`initialize with name=${name}`);
+    //console.log("deviceInfo:", this.movehub.deviceInfo)
 
 
     this.on('msg:custom', async (content: any) => {
@@ -97,7 +98,7 @@ export class MoveHubModel extends DOMWidgetModel {
           try {
             // Connect is always allowed if the device is not already connected
             if (
-              !this.movehub.deviceInfo.connected &&
+              /* !this.movehub.deviceInfo.connected &&*/
               content.task_type === 'connect'
             ) {
               await this.connect();
@@ -112,7 +113,7 @@ export class MoveHubModel extends DOMWidgetModel {
 
             // Disconnect can also be called even if already disconnected
             if (
-              this.movehub.deviceInfo.connected &&
+              /*this.movehub.deviceInfo.connected &&*/
               content.task_type === 'disconnect'
             ) {
               this.disconnect();
@@ -126,9 +127,9 @@ export class MoveHubModel extends DOMWidgetModel {
             }
 
             // All other commands require a connection
-            if (!this.movehub.deviceInfo.connected) {
+            /*if (!this.movehub.deviceInfo.connected) {
               throw new Error('Boost is not connected.');
-            }
+            }*/
 
             switch (content.task_type) {
               case 'motor-time':
@@ -243,8 +244,6 @@ export class MoveHubModel extends DOMWidgetModel {
     const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
     const identifier = this.get('identifier');
 
-    /*if (!this.movehub.deviceInfo.connected) {
-      console.log('not connected yet');*/
     if (identifier === '') {
       this.movehub =
         await MoveHubModel.bluetoothManager.connect(movehubRegistryItem);
@@ -254,8 +253,6 @@ export class MoveHubModel extends DOMWidgetModel {
       );
       if (selectedDevice && selectedDevice instanceof MoveHub) {
         this.movehub = selectedDevice;
-        console.log('MoveHub is:', this.movehub);
-        //}
       }
       for (let i = 0; i < 30; i++) {
         await sleep(100);
