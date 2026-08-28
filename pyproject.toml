@@ -3,7 +3,7 @@ requires = ["hatchling>=1.5.0", "hatch-nodejs-version>=0.3.2", "jupyter-builder>
 build-backend = "hatchling.build"
 
 [project]
-name = "jupyter_movehub"
+name = "ipymovehub"
 readme = "README.md"
 license = "BSD-3-Clause"
 license-files = ["LICENSE"]
@@ -38,24 +38,23 @@ source = "nodejs"
 fields = ["description", "authors", "urls", "keywords"]
 
 [tool.hatch.build.targets.sdist]
-artifacts = ["jupyter_movehub/labextension"]
+artifacts = ["ipymovehub/labextension"]
 exclude = [".github", "binder"]
 
 [tool.hatch.build.targets.wheel.shared-data]
-"jupyter_movehub/labextension" = "share/jupyter/labextensions/jupyter-movehub"
-"install.json" = "share/jupyter/labextensions/jupyter-movehub/install.json"
+"ipymovehub/labextension" = "share/jupyter/labextensions/jupyter-movehub"
 
 [tool.hatch.build.hooks.version]
-path = "jupyter_movehub/_version.py"
+path = "ipymovehub/_version.py"
 
 [tool.hatch.build.hooks.jupyter-builder]
 dependencies = ["hatch-jupyter-builder>=0.5"]
 build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
-    "jupyter_movehub/labextension/static/style.js",
-    "jupyter_movehub/labextension/package.json",
+    "ipymovehub/labextension/static/style.js",
+    "ipymovehub/labextension/package.json",
 ]
-skip-if-exists = ["jupyter_movehub/labextension/static/style.js"]
+skip-if-exists = ["ipymovehub/labextension/static/style.js"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 build_cmd = "build:prod"
@@ -65,7 +64,7 @@ npm = ["jlpm"]
 build_cmd = "install:extension"
 npm = ["jlpm"]
 source_dir = "src"
-build_dir = "jupyter_movehub/labextension"
+build_dir = "ipymovehub/labextension"
 
 [tool.jupyter-releaser.options]
 version_cmd = "hatch version"

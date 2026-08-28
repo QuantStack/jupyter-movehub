@@ -1,4 +1,4 @@
-# jupyter_movehub
+# ipymovehub
 
 A JupyterLab extension to connect to a Lego Move Hub and drive Legoboost robots.
 
@@ -11,7 +11,7 @@ A JupyterLab extension to connect to a Lego Move Hub and drive Legoboost robots.
 To install the extension, execute:
 
 ```bash
-pip install jupyter_movehub
+pip install ipymovehub
 ```
 
 ## Uninstall
@@ -19,7 +19,7 @@ pip install jupyter_movehub
 To remove the extension, execute:
 
 ```bash
-pip uninstall jupyter_movehub
+pip uninstall ipymovehub
 ```
 
 ## Contributing

@@ -11,7 +11,7 @@ kind: frontend
 labextension_name: jupyter-movehub
 project_short_description: A JupyterLab extension to connect to a Lego Move Hub and
     drive Legoboost robots.
-python_name: jupyter_movehub
+python_name: ipymovehub
 repository: https://github.com/QuantStack/jupyter-movehub
 test: true
 
