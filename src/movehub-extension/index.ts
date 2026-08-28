@@ -180,6 +180,7 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
 
 const MoveHubExtensionPlugins: JupyterFrontEndPlugin<any>[] = [
   MoveHubRegisterPlugin,
-  MoveHubControlPanelPlugin, ipymovehubPlugin
+  MoveHubControlPanelPlugin,
+  ipymovehubPlugin
 ];
 export default MoveHubExtensionPlugins;

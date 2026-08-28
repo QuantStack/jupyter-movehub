@@ -24,19 +24,18 @@ import {
   DOMWidgetView,
   ISerializers
 } from '@jupyter-widgets/base';
-import { MODULE_NAME, MODULE_VERSION } from './version'
+import { MODULE_NAME, MODULE_VERSION } from './version';
 // Import the CSS
 import '../../style/widget.css';
 import { IBluetoothManager } from '@jupyter-bluetooth-manager/bluetooth';
 import { movehubRegistryItem } from '.';
-import { MoveHub } from '../movehub/moveHub'
+import { MoveHub } from '../movehub/moveHub';
 // @ts-expect-error To be fixed
 import * as ReactDOMClient from 'react-dom/client';
 // @ts-expect-error To be fixed
 import { Root } from 'react-dom/client';
 //import { DeviceInfoTableComplete } from './components/DeviceInfoTableComplete';
 import MoveHubViewComponent from '../movehub/components/MoveHubView';
-
 
 // we use globals for the movehub device since connecting to
 // them takes a long time. If the model would hold the
@@ -55,7 +54,7 @@ export class MoveHubModel extends DOMWidgetModel {
       _view_module_version: MoveHubModel.view_module_version,
       _device_info: {},
       name: 'device1',
-      identifier: '',
+      identifier: ''
     };
   }
 
@@ -88,7 +87,6 @@ export class MoveHubModel extends DOMWidgetModel {
     const name: string = this.get('name');
     console.log(`initialize with name=${name}`);
     //console.log("deviceInfo:", this.movehub.deviceInfo)
-
 
     this.on('msg:custom', async (content: any) => {
       switch (content.event) {
