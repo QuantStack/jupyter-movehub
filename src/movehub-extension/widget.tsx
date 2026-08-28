@@ -25,8 +25,6 @@ import {
   ISerializers
 } from '@jupyter-widgets/base';
 import { MODULE_NAME, MODULE_VERSION } from './version';
-// Import the CSS
-import '../../style/widget.css';
 import { IBluetoothManager } from '@jupyter-bluetooth-manager/bluetooth';
 import { movehubRegistryItem } from '.';
 import { MoveHub } from '../movehub/moveHub';
