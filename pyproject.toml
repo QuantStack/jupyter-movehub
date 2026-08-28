@@ -43,7 +43,6 @@ exclude = [".github", "binder"]
 
 [tool.hatch.build.targets.wheel.shared-data]
 "ipymovehub/labextension" = "share/jupyter/labextensions/jupyter-movehub"
-"install.json" = "share/jupyter/labextensions/jupyter-movehub/install.json"
 
 [tool.hatch.build.hooks.version]
 path = "ipymovehub/_version.py"
