@@ -83,7 +83,7 @@ export class MoveHub extends BluetoothManager.Device {
       turnSpeed: DEFAULT_CONFIG.TURN_SPEED
     };
     this.contextCommands = [
-      'jupyter-movehub:disconnect-device',
+      'jupyter-movehub:disconnect-movehub',
       'jupyter-movehub:add-movehub-control-panel'
     ];
     this.isConnected = false;
