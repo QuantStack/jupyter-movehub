@@ -15,35 +15,27 @@ export default function MoveHubViewComponent({
   bluetoothManager,
   moveHub
 }: IMoveHubViewProps) {
-  if (areMoveHubsAlreadyConnected === true) {
+  if (moveHub) {
+    return <DeviceInfoTableComplete moveHub={moveHub} />;
+  }
+
+  if (areMoveHubsAlreadyConnected) {
     return (
       <>
-        {!moveHub ? (
-          <>
-            <div>
-              Warning: there are already one or more Lego Move Hubs connected.
-              If you want to use one of them, you can copy paste its ID from the
-              clipboard:{' '}
-            </div>
-            <MoveHubList bluetoothManager={bluetoothManager} />
-          </>
-        ) : (
-          <DeviceInfoTableComplete moveHub={moveHub} />
-        )}
-      </>
-    );
-  } else {
-    return (
-      <>
-        {!moveHub ? (
-          <div>
-            There is no device connected yet. Instantiate a new instance of Move
-            Hub class.
-          </div>
-        ) : (
-          <DeviceInfoTableComplete moveHub={moveHub} />
-        )}
+        <div>
+          Warning: there are already one or more Lego Move Hubs connected.
+          If you want to use one of them, you can copy paste its ID from the
+          clipboard:{' '}
+        </div>
+        <MoveHubList bluetoothManager={bluetoothManager} />
       </>
     );
   }
+
+  return (
+    <div>
+      There is no device connected yet. Instantiate a new instance of the Move
+      Hub class.
+    </div>
+  );
 }

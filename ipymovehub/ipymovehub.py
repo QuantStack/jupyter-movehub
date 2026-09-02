@@ -153,6 +153,7 @@ class MoveHubWidget(DOMWidget):
     _view_module_version = Unicode(module_version).tag(sync=True)
     _device_info = Dict(DEFAULT_DEVICE_INFO, read_only=True).tag(sync=True)
     name = Unicode("device1").tag(sync=True)
+    identifier = Unicode("").tag(sync=True)
 
     def __init__(self, *args, **kwargs):
         super(MoveHubWidget, self).__init__(*args, **kwargs)
@@ -191,8 +192,10 @@ class MoveHubWidget(DOMWidget):
 
             del self._pending_tasks[task_uuid]
     
-    def connect(self):
-        return self._create_task(task_type="connect", data={})
+    def connect(self, identifier=None):
+        if identifier is None:
+            identifier = self.identifier
+        return self._create_task(task_type="connect", data={"identifier": identifier})
     
     def disconnect(self):
         return self._create_task(task_type="disconnect", data={}) 

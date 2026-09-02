@@ -83,8 +83,8 @@ export class MoveHubModel extends DOMWidgetModel {
   initialize(attributes: any, options: any) {
     super.initialize(attributes, options);
     const name: string = this.get('name');
-    console.log(`initialize with name=${name}`);
-    //console.log("deviceInfo:", this.movehub.deviceInfo)
+    const identifier: string = this.get('identifier');
+    console.log(`initialize with name=${name}, identifier=${identifier}`);
 
     this.on('msg:custom', async (content: any) => {
       switch (content.event) {
@@ -94,10 +94,10 @@ export class MoveHubModel extends DOMWidgetModel {
           try {
             // Connect is always allowed if the device is not already connected
             if (
-              /* !this.movehub.deviceInfo.connected &&*/
               content.task_type === 'connect'
             ) {
               await this.connect();
+              console.log(`Connected to MoveHub ${content.data.identifier}`);
 
               this.send({
                 event: 'task-finished',
