@@ -42,7 +42,7 @@ export interface IDeviceTypeRegistryItem {
 
 export const movehubRegistryItem: IDeviceTypeRegistryItem = {
   deviceType: 'LEGO® Move Hub',
-  instructions: 'Please press the green button to pair the Movub.',
+  instructions: 'To pair the Move Hub, press the green button and pick your device in the list.',
   SVGUrl: movehubPairingSVGUrl,
   withImage: true,
   imageAlt: 'Pairing instructions for the Movehub device.',
