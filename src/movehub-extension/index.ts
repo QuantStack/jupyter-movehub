@@ -18,14 +18,34 @@ import { BatteryWidget } from '../movehub/components/BatteryGauge';
 import { DeviceIdentifierWidget } from '../movehub/components/DeviceIdentifier';
 import { ConnectionStatusWidget } from '../movehub/components/ConnectionStatus';
 import ipymovehubPlugin from './plugin';
+import movehubPairingSVG from '../../style/images/MovehubPairing.svg';
+const movehubPairingSVGUrl = `data:image/svg+xml;base64,${btoa(movehubPairingSVG)}`;
 export const addMoveHubControlPanel =
   'jupyter-movehub:add-movehub-control-panel';
 export const connectMoveHub = 'jupyter-movehub:connect-movehub';
 export const disconnectMoveHub = 'jupyter-movehub:disconnect-movehub';
 export const moveHubServiceUUID = '00001623-1212-efde-1623-785feabcd123';
 export const moveHubCharacteristicUUID = '00001624-1212-efde-1623-785feabcd123';
+//import { IDeviceOptions } from '@jupyter-bluetooth-manager/bluetooth';
+
+/*export interface IDeviceTypeRegistryItem {
+  deviceType: string;
+  instructions: string;
+  SVGUrl: string;
+  withImage: boolean;
+  imageAlt: string;
+  factory: (
+    native: BluetoothDevice
+  ) => Promise<BluetoothManager.Device | undefined>;
+  options: IDeviceOptions;
+}*/
+
 export const movehubRegistryItem: IDeviceTypeRegistryItem = {
   deviceType: 'LEGO® Move Hub',
+  instructions: 'Please press the green button to pair the Movub.',
+  SVGUrl: movehubPairingSVGUrl,
+  withImage: true,
+  imageAlt: 'Pairing instructions for the Movehub device.',
   options: {
     acceptAllDevices: false,
     filters: [{ services: [moveHubServiceUUID] }],
