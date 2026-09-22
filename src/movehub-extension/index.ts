@@ -7,7 +7,7 @@ import { IThemeManager, MainAreaWidget } from '@jupyterlab/apputils';
 import { Toolbar } from '@jupyterlab/ui-components';
 import {
   BluetoothManager,
-  IDeviceTypeRegistryItem,
+  //IDeviceTypeRegistryItem,
   IBluetoothManager
 } from '@jupyter-bluetooth-manager/bluetooth';
 import { MoveHub } from '../movehub/moveHub';
@@ -26,9 +26,9 @@ export const connectMoveHub = 'jupyter-movehub:connect-movehub';
 export const disconnectMoveHub = 'jupyter-movehub:disconnect-movehub';
 export const moveHubServiceUUID = '00001623-1212-efde-1623-785feabcd123';
 export const moveHubCharacteristicUUID = '00001624-1212-efde-1623-785feabcd123';
-//import { IDeviceOptions } from '@jupyter-bluetooth-manager/bluetooth';
+import { IDeviceOptions } from '@jupyter-bluetooth-manager/bluetooth';
 
-/*export interface IDeviceTypeRegistryItem {
+export interface IDeviceTypeRegistryItem {
   deviceType: string;
   instructions: string;
   SVGUrl: string;
@@ -38,7 +38,7 @@ export const moveHubCharacteristicUUID = '00001624-1212-efde-1623-785feabcd123';
     native: BluetoothDevice
   ) => Promise<BluetoothManager.Device | undefined>;
   options: IDeviceOptions;
-}*/
+}
 
 export const movehubRegistryItem: IDeviceTypeRegistryItem = {
   deviceType: 'LEGO® Move Hub',
