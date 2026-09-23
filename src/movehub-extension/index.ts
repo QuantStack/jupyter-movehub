@@ -28,29 +28,35 @@ export const moveHubServiceUUID = '00001623-1212-efde-1623-785feabcd123';
 export const moveHubCharacteristicUUID = '00001624-1212-efde-1623-785feabcd123';
 import { IDeviceOptions } from '@jupyter-bluetooth-manager/bluetooth';
 
+export interface IPairingInformation {
+    instructions: string | undefined,
+    SVGUrl: string | undefined,
+    imageAlt: string | undefined;
+}
+
 export interface IDeviceTypeRegistryItem {
   deviceType: string;
-  instructions: string;
-  SVGUrl: string;
-  withImage: boolean;
-  imageAlt: string;
+  options: IDeviceOptions;
+  pairingInfo: IPairingInformation,
   factory: (
     native: BluetoothDevice
   ) => Promise<BluetoothManager.Device | undefined>;
-  options: IDeviceOptions;
+}
+
+const moveHubPairingInfo: IPairingInformation = {
+  instructions: "To pair the Move Hub, press the green button and pick the device in the list.",
+  SVGUrl: movehubPairingSVGUrl,
+  imageAlt: "Pairing instructions for the Movehub device",
 }
 
 export const movehubRegistryItem: IDeviceTypeRegistryItem = {
   deviceType: 'LEGO® Move Hub',
-  instructions: 'To pair the Move Hub, press the green button and pick your device in the list.',
-  SVGUrl: movehubPairingSVGUrl,
-  withImage: true,
-  imageAlt: 'Pairing instructions for the Movehub device.',
   options: {
     acceptAllDevices: false,
     filters: [{ services: [moveHubServiceUUID] }],
     optionalServices: [moveHubServiceUUID]
   },
+  pairingInfo: moveHubPairingInfo,
   factory: async (native: BluetoothDevice) => {
     const device = new MoveHub(native);
     await device.initDevice();
