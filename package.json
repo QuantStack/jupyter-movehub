@@ -1,6 +1,6 @@
 {
     "name": "jupyter-movehub",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "A JupyterLab extension to connect to a Lego Move Hub and drive Legoboost robots.",
     "keywords": [
         "jupyter",
@@ -57,7 +57,8 @@
         "watch:labextension": "jupyter-builder watch ."
     },
     "dependencies": {
-        "@jupyter-bluetooth-manager/bluetooth": "^0.2.0",
+        "@jupyter-bluetooth-manager/bluetooth": "^0.3.1",
+        "@jupyter-bluetooth-manager/bluetooth-extension": "^0.3.1",
         "@jupyter-widgets/base": "^1.1.10 || ^2 || ^3 || ^4 || ^5 || ^6",
         "@jupyterlab/application": "^4.0.0",
         "@jupyterlab/running": "^4.6.3",
