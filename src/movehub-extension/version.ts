@@ -7,7 +7,7 @@
  * version number.
  */
 //export const MODULE_VERSION = data.version;
-export const MODULE_VERSION = '0.1.0';
+export const MODULE_VERSION = '0.2.0';
 
 /*
  * The current package name.

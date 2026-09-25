@@ -8,7 +8,8 @@ import { Toolbar } from '@jupyterlab/ui-components';
 import {
   BluetoothManager,
   IDeviceTypeRegistryItem,
-  IBluetoothManager
+  IBluetoothManager,
+  IPairingInformation
 } from '@jupyter-bluetooth-manager/bluetooth';
 import { MoveHub } from '../movehub/moveHub';
 import { LegoBrickIcon } from '../movehub/icon';
@@ -18,20 +19,32 @@ import { BatteryWidget } from '../movehub/components/BatteryGauge';
 import { DeviceIdentifierWidget } from '../movehub/components/DeviceIdentifier';
 import { ConnectionStatusWidget } from '../movehub/components/ConnectionStatus';
 import ipymovehubPlugin from './plugin';
+import movehubPairingSVG from '../../style/images/MovehubPairing.svg';
+const movehubPairingSVGUrl = `data:image/svg+xml;base64,${btoa(movehubPairingSVG)}`;
 export const addMoveHubControlPanel =
   'jupyter-movehub:add-movehub-control-panel';
 export const connectMoveHub = 'jupyter-movehub:connect-movehub';
 export const disconnectMoveHub = 'jupyter-movehub:disconnect-movehub';
 export const moveHubServiceUUID = '00001623-1212-efde-1623-785feabcd123';
 export const moveHubCharacteristicUUID = '00001624-1212-efde-1623-785feabcd123';
+
+const moveHubPairingInfo: IPairingInformation = {
+  instructions:
+    'To pair the Move Hub, press the green button and pick the device in the list.',
+  SVGUrl: movehubPairingSVGUrl,
+  imageAlt: 'Pairing instructions for the Movehub device',
+  imageWidth: '400px'
+};
+
 export const movehubRegistryItem: IDeviceTypeRegistryItem = {
   deviceType: 'LEGO® Move Hub',
+  pairingInfo: moveHubPairingInfo,
   options: {
     acceptAllDevices: false,
     filters: [{ services: [moveHubServiceUUID] }],
     optionalServices: [moveHubServiceUUID]
   },
-  factory: async (native: BluetoothDevice) => {
+  createDevice: async (native: BluetoothDevice) => {
     const device = new MoveHub(native);
     await device.initDevice();
     const hub = device.hub;
@@ -45,7 +58,8 @@ export const movehubRegistryItem: IDeviceTypeRegistryItem = {
 
 const MoveHubRegisterPlugin: JupyterFrontEndPlugin<void> = {
   id: 'jupyter-movehub:movehub-register-plugin',
-  description: 'Registers the move hub device and provides a factory.',
+  description:
+    'Registers the move hub device and provides a factory to create a device.',
   requires: [IBluetoothManager],
   autoStart: true,
   activate: (
