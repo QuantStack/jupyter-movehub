@@ -4,7 +4,7 @@ import {
 } from '@jupyterlab/application';
 import { ITranslator } from '@jupyterlab/translation';
 import { IThemeManager, MainAreaWidget } from '@jupyterlab/apputils';
-import { Toolbar } from '@jupyterlab/ui-components';
+import { closeIcon, Toolbar } from '@jupyterlab/ui-components';
 import {
   BluetoothManager,
   IDeviceTypeRegistryItem,
@@ -133,8 +133,9 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
           throw new Error('The device is not a Move Hub.');
         }
       },
-      caption: trans.__('Open a LEGO® Move Hub control panel'),
-      label: trans.__('Open a LEGO® Move Hub Control Panel')
+      caption: trans.__('Open LEGO® Move Hub control panel'),
+      label: trans.__('Open LEGO® Move Hub Control Panel'),
+      icon: LegoBrickIcon
     });
 
     app.commands.addCommand(disconnectMoveHub, {
@@ -149,8 +150,8 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
           throw new Error('No device provided or device is invalid');
         }
       },
-      caption: 'Disconnect MoveHub',
-      label: 'Disconnect MoveHub',
+      caption: 'Disconnect',
+      label: 'Disconnect',
       isEnabled: args => {
         const selectedDevice = bluetoothManager.deviceList.find(
           device => device.native.id === (args.deviceID as string)
@@ -164,7 +165,8 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
         } else {
           return false;
         }
-      }
+      },
+      icon: closeIcon
     });
 
     app.commands.addCommand(connectMoveHub, {
