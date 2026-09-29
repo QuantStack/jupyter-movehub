@@ -23,10 +23,15 @@ import movehubPairingSVG from '../../style/images/MovehubPairing.svg';
 const movehubPairingSVGUrl = `data:image/svg+xml;base64,${btoa(movehubPairingSVG)}`;
 export const addMoveHubControlPanel =
   'jupyter-movehub:add-movehub-control-panel';
+export const addMoveHubControlPanelFromLauncher =
+  'jupyter-movehub:add-movehub-control-panel-from-launcher';
 export const connectMoveHub = 'jupyter-movehub:connect-movehub';
 export const disconnectMoveHub = 'jupyter-movehub:disconnect-movehub';
 export const moveHubServiceUUID = '00001623-1212-efde-1623-785feabcd123';
 export const moveHubCharacteristicUUID = '00001624-1212-efde-1623-785feabcd123';
+import { ILauncher } from '@jupyterlab/launcher';
+import { PairingInfoWidget } from '@jupyter-bluetooth-manager/bluetooth';
+import { Dialog } from '@jupyterlab/apputils';
 
 const moveHubPairingInfo: IPairingInformation = {
   instructions:
@@ -55,6 +60,38 @@ export const movehubRegistryItem: IDeviceTypeRegistryItem = {
     return device;
   }
 };
+
+function createContentForMoveHubPanel(
+  device: MoveHub,
+  themeManager: IThemeManager,
+  app: JupyterFrontEnd
+) {
+  const content = new MoveHubPanelWidget(device, themeManager);
+  content.addClass('jp-movehub-panel-content');
+  const toolbar = new Toolbar();
+  toolbar.addClass('jp-movehub-panel-toolbar');
+  const main = new MainAreaWidget({ content, toolbar });
+  main.addClass('jp-movehub-panel-main');
+  main.toolbar.addItem(
+    'connection-status',
+    new ConnectionStatusWidget(device, app.commands)
+  );
+  main.toolbar.addItem(
+    'select-lego-model',
+    new LegoBuildSelectorWidget(device)
+  );
+  toolbar.addItem('spacer', Toolbar.createSpacerItem());
+  main.toolbar.addItem(
+    'battery-gauge',
+    new BatteryWidget(device, themeManager)
+  );
+  main.toolbar.addItem('device-identifier', new DeviceIdentifierWidget(device));
+  main.id = 'lego-movehub-control-panel';
+  main.title.label = 'LEGO® Move Hub';
+  main.title.closable = true;
+  main.title.icon = LegoBrickIcon;
+  app.shell.add(main, 'main');
+}
 
 const MoveHubRegisterPlugin: JupyterFrontEndPlugin<void> = {
   id: 'jupyter-movehub:movehub-register-plugin',
@@ -101,40 +138,51 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
           const device = result[
             result.length - 1
           ] as MoveHub; /* the last added MoveHub device*/
-          const content = new MoveHubPanelWidget(device, themeManager);
-          content.addClass('jp-movehub-panel-content');
-          const toolbar = new Toolbar();
-          toolbar.addClass('jp-movehub-panel-toolbar');
-          const main = new MainAreaWidget({ content, toolbar });
-          main.addClass('jp-movehub-panel-main');
-          main.toolbar.addItem(
-            'connection-status',
-            new ConnectionStatusWidget(device, app.commands)
-          );
-          main.toolbar.addItem(
-            'select-lego-model',
-            new LegoBuildSelectorWidget(device)
-          );
-          toolbar.addItem('spacer', Toolbar.createSpacerItem());
-          main.toolbar.addItem(
-            'battery-gauge',
-            new BatteryWidget(device, themeManager)
-          );
-          main.toolbar.addItem(
-            'device-identifier',
-            new DeviceIdentifierWidget(device)
-          );
-          main.id = 'lego-movehub-control-panel';
-          main.title.label = 'LEGO® Move Hub';
-          main.title.closable = true;
-          main.title.icon = LegoBrickIcon;
-          app.shell.add(main, 'main');
+          createContentForMoveHubPanel(device, themeManager, app);
         } else {
-          throw new Error('The device is not a Move Hub.');
+          //throw new Error('The device is not a Move Hub.');
         }
       },
-      caption: trans.__('Open LEGO® Move Hub control panel'),
-      label: trans.__('Open LEGO® Move Hub Control Panel'),
+      caption: trans.__('Open Move Hub panel'),
+      label: trans.__('Open Move Hub Panel'),
+      icon: LegoBrickIcon
+    });
+
+    app.commands.addCommand(addMoveHubControlPanelFromLauncher, {
+      execute: async args => {
+        const result = bluetoothManager.deviceList.filter(
+          device => device instanceof MoveHub
+        );
+        if (result) {
+          const device = result[
+            result.length - 1
+          ] as MoveHub; /* the last added MoveHub device*/
+
+          if (device) {
+            createContentForMoveHubPanel(device, themeManager, app);
+          } else {
+            const body = new PairingInfoWidget(movehubRegistryItem.pairingInfo);
+            const dialog = new Dialog({
+              title: 'Pairing information',
+              body: body,
+              buttons: [Dialog.okButton({ label: 'Close' })]
+            });
+            try {
+              dialog.launch();
+              const device = (await bluetoothManager.connect(
+                movehubRegistryItem
+              )) as MoveHub;
+              createContentForMoveHubPanel(device, themeManager, app);
+            } finally {
+              dialog.resolve();
+            }
+          }
+        } else /* no device connected */ {
+          throw new Error('There is not Move Hub instance in the list.');
+        }
+      },
+      caption: trans.__('Move Hub'),
+      label: trans.__('Move Hub'),
       icon: LegoBrickIcon
     });
 
@@ -150,8 +198,8 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
           throw new Error('No device provided or device is invalid');
         }
       },
-      caption: 'Disconnect',
-      label: 'Disconnect',
+      caption: 'Disconnect Move Hub',
+      label: 'Disconnect Move Hub',
       isEnabled: args => {
         const selectedDevice = bluetoothManager.deviceList.find(
           device => device.native.id === (args.deviceID as string)
@@ -170,12 +218,26 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
     });
 
     app.commands.addCommand(connectMoveHub, {
-      execute: args => {
-        const newDevice = bluetoothManager.connect(movehubRegistryItem);
-        return newDevice;
+      execute: async args => {
+        const body = new PairingInfoWidget(movehubRegistryItem.pairingInfo);
+        const dialog = new Dialog({
+          title: 'Pairing information',
+          body: body,
+          buttons: [Dialog.okButton({ label: 'Close' })]
+        });
+        try {
+          dialog.launch();
+          const newDevice = (await bluetoothManager.connect(
+            movehubRegistryItem
+          )) as MoveHub;
+          return newDevice;
+        } finally {
+          dialog.resolve();
+        }
       },
-      caption: 'Connect MoveHub',
-      label: 'Connect MoveHub',
+      caption: 'Connect Move Hub',
+      label: 'Connect Move Hub',
+      icon: LegoBrickIcon,
       isEnabled: args => {
         const selectedDevice = bluetoothManager.deviceList.find(
           device => device.native.id === (args.deviceID as string)
@@ -194,8 +256,23 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
   }
 };
 
+const MoveHubLauncherPlugin: JupyterFrontEndPlugin<void> = {
+  id: 'jupyter-movehub:launcher',
+  autoStart: true,
+  requires: [ILauncher],
+  activate: (app: JupyterFrontEnd, launcher: ILauncher) => {
+    launcher.add({
+      command: 'jupyter-movehub:add-movehub-control-panel-from-launcher',
+      category: 'Move Hub',
+      rank: 1,
+      args: {}
+    });
+  }
+};
+
 const MoveHubExtensionPlugins: JupyterFrontEndPlugin<any>[] = [
   MoveHubRegisterPlugin,
+  MoveHubLauncherPlugin,
   MoveHubControlPanelPlugin,
   ipymovehubPlugin
 ];
