@@ -2264,7 +2264,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/apputils@npm:^4.6.11, @jupyterlab/apputils@npm:^4.7.4":
+"@jupyterlab/apputils@npm:^4.7.4":
   version: 4.7.4
   resolution: "@jupyterlab/apputils@npm:4.7.4"
   dependencies:
@@ -2571,21 +2571,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/launcher@npm:4.5.11":
-  version: 4.5.11
-  resolution: "@jupyterlab/launcher@npm:4.5.11"
+"@jupyterlab/launcher@npm:^4.0.0":
+  version: 4.6.4
+  resolution: "@jupyterlab/launcher@npm:4.6.4"
   dependencies:
-    "@jupyterlab/apputils": ^4.6.11
-    "@jupyterlab/translation": ^4.5.11
-    "@jupyterlab/ui-components": ^4.5.11
+    "@jupyterlab/apputils": ^4.7.4
+    "@jupyterlab/translation": ^4.6.4
+    "@jupyterlab/ui-components": ^4.6.4
     "@lumino/algorithm": ^2.0.4
     "@lumino/commands": ^2.3.3
     "@lumino/coreutils": ^2.2.2
     "@lumino/disposable": ^2.1.5
     "@lumino/properties": ^2.0.4
-    "@lumino/widgets": ^2.7.5
+    "@lumino/widgets": ^2.8.0
     react: ^18.2.0
-  checksum: 09ad3aff7d63ef9e05d13b3419533b25a7b6c3e0b5e43aceff109bdf0619716acc86aff75ea455ad5e49323df3b15e3e464ef3728b05d61c14a62677fd1ada6d
+  checksum: f1facb9bc3d162221f1e9b7b0d204f8608c0ada1f878f651eb0383d8ad776c7de833ffcdb7289bbd7ee9df9c605d9c6aa1ee907ad51946a029ed3d1b2abef997
   languageName: node
   linkType: hard
 
@@ -2904,7 +2904,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/translation@npm:^4.5.11, @jupyterlab/translation@npm:^4.6.4":
+"@jupyterlab/translation@npm:^4.6.4":
   version: 4.6.4
   resolution: "@jupyterlab/translation@npm:4.6.4"
   dependencies:
@@ -2917,7 +2917,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/ui-components@npm:^4.5.11, @jupyterlab/ui-components@npm:^4.6.4":
+"@jupyterlab/ui-components@npm:^4.6.4":
   version: 4.6.4
   resolution: "@jupyterlab/ui-components@npm:4.6.4"
   dependencies:
@@ -8229,7 +8229,7 @@ __metadata:
     "@jupyter/builder": ^1.2.0
     "@jupyter/eslint-plugin": ^0.0.5
     "@jupyterlab/application": ^4.0.0
-    "@jupyterlab/launcher": 4.5.11
+    "@jupyterlab/launcher": ^4.0.0
     "@jupyterlab/running": ^4.6.3
     "@jupyterlab/settingregistry": ^4.0.0
     "@jupyterlab/testutils": ^4.0.0
