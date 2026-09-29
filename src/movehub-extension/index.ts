@@ -257,7 +257,7 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
 };
 
 const MoveHubLauncherPlugin: JupyterFrontEndPlugin<void> = {
-  id: 'my-extension:launcher',
+  id: 'jupyter-movehub:launcher',
   autoStart: true,
   requires: [ILauncher],
   activate: (app: JupyterFrontEnd, launcher: ILauncher) => {
