@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Poll } from '@lumino/polling';
-import { DeviceInfo } from '../moveHub/types';
+import { DeviceInfo } from '../movehub-control/types';
 import { defaultDeviceInfo, MoveHub } from '../moveHub';
 import { IMoveHubPanelProps } from './MoveHubPanel';
 import { ReactWidget } from '@jupyterlab/ui-components';

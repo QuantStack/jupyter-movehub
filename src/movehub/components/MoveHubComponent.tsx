@@ -1,7 +1,7 @@
 import React from 'react';
 import MoveHub from './MoveHub';
 import { IMoveHubPanelWithThemeProps } from './MoveHubPanel';
-import { HubAsync } from '../moveHub/hub/hubAsync';
+import { HubAsync } from '../movehub-control/hub/hubAsync';
 import { MoveForm } from './MoveForm';
 import { ColorSelector } from './ColorSelector';
 

@@ -3,7 +3,7 @@ import { IMoveHubPanelProps } from './MoveHubPanel';
 import ColoredCircleWithText from './ColoredCircleWithText';
 import { useEffect, useState } from 'react';
 import { Poll } from '@lumino/polling';
-import { DeviceInfo } from '../moveHub/types';
+import { DeviceInfo } from '../movehub-control/types';
 import { defaultDeviceInfo, MoveHub } from '../moveHub';
 import { ReactWidget } from '@jupyterlab/ui-components';
 import { Menu } from '@lumino/widgets';

@@ -1,8 +1,11 @@
-import { HubAsync } from './moveHub/hub/hubAsync';
+import { HubAsync } from './movehub-control/hub/hubAsync';
 import { BluetoothManager } from '@jupyter-bluetooth-manager/bluetooth';
-import { HubControl } from './moveHub/hub-control';
-import { IDeviceConfiguration, DEFAULT_CONFIG } from './moveHub/hub/hubAsync';
-import { ControlData, DeviceInfo, RawData } from './moveHub/types';
+import { HubControl } from './movehub-control/hub-control';
+import {
+  IDeviceConfiguration,
+  DEFAULT_CONFIG
+} from './movehub-control/hub/hubAsync';
+import { ControlData, DeviceInfo, RawData } from './movehub-control/types';
 import {
   moveHubCharacteristicUUID,
   moveHubServiceUUID

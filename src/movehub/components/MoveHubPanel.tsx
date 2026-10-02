@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReactWidget } from '@jupyterlab/ui-components';
 import { MoveHub } from '../moveHub';
-import { HubAsync } from '../moveHub/hub/hubAsync';
+import { HubAsync } from '../movehub-control/hub/hubAsync';
 import { DeviceInfoTable } from './DeviceInfoTable';
 import { LegoBuildSpecific } from './LegoBuildSpecific';
 import { IThemeManager } from '@jupyterlab/apputils';
