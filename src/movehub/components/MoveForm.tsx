@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { HubAsync } from '../moveHub/hub/hubAsync';
+import { HubAsync } from '../movehub-control/hub/hubAsync';
 import InputField from './InputField';
 
 export interface IMoveFormProps {

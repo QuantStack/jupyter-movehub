@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { Poll } from '@lumino/polling';
 import BatteryGauge from 'react-battery-gauge';
-import { DeviceInfo } from '../moveHub/types';
+import { DeviceInfo } from '../movehub-control/types';
 import { defaultDeviceInfo, MoveHub } from '../moveHub';
 import { IMoveHubPanelWithThemeProps } from './MoveHubPanel';
 import { ReactWidget } from '@jupyterlab/ui-components';
