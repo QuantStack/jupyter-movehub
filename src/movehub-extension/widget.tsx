@@ -35,10 +35,6 @@ import { Root } from 'react-dom/client';
 //import { DeviceInfoTableComplete } from './components/DeviceInfoTableComplete';
 import MoveHubViewComponent from '../movehub/components/MoveHubView';
 
-// we use globals for the movehub device since connecting to
-// them takes a long time. If the model would hold the
-// movehub instance, we would need to re-connect any time
-// we restart the kernel.
 
 export class MoveHubModel extends DOMWidgetModel {
   defaults() {
@@ -84,7 +80,6 @@ export class MoveHubModel extends DOMWidgetModel {
     super.initialize(attributes, options);
     const name: string = this.get('name');
     console.log(`initialize with name=${name}`);
-    //console.log("deviceInfo:", this.movehub.deviceInfo)
 
     this.on('msg:custom', async (content: any) => {
       switch (content.event) {
@@ -287,7 +282,6 @@ export class MoveHubModel extends DOMWidgetModel {
   private polling_frame = 0;
   private polling_is_running = false;
   stop_polling = false;
-  //private currentProcessing: Promise<void> = Promise.resolve();
 
   static model_name = 'MoveHubModel';
   static model_module = MODULE_NAME;
