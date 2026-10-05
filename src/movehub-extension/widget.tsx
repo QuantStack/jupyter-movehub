@@ -35,7 +35,6 @@ import { Root } from 'react-dom/client';
 //import { DeviceInfoTableComplete } from './components/DeviceInfoTableComplete';
 import MoveHubViewComponent from '../movehub/components/MoveHubView';
 
-
 export class MoveHubModel extends DOMWidgetModel {
   defaults() {
     return {
@@ -298,11 +297,24 @@ export class MoveHubView extends DOMWidgetView {
   async render() {
     this.el.classList.add('jupyter-react-widget');
     this.root = ReactDOMClient.createRoot(this.el);
+
+    const model = this.model as MoveHubModel;
+
+    // Listen for changes to _device_info and re-render
+    this.listenTo(model, 'change:_device_info', () => {
+      console.log('Device info has changed');
+      this.updateRender();
+    });
+
+    this.updateRender();
+  }
+
+  private updateRender() {
     const model = this.model as MoveHubModel;
     const moveHub = model.movehub;
     const areDevicesConnected =
       MoveHubModel.bluetoothManager.deviceList.length !== 0;
-    this.root.render(
+    this.root?.render(
       <MoveHubViewComponent
         areMoveHubsAlreadyConnected={areDevicesConnected}
         bluetoothManager={MoveHubModel.bluetoothManager}
@@ -310,6 +322,7 @@ export class MoveHubView extends DOMWidgetView {
       />
     );
   }
+
   remove() {
     this.root?.unmount();
   }

@@ -24,13 +24,17 @@ export default function CopyToClipboard({ textToCopy }: ICopyToClipboardProps) {
         margin: '4px 0'
       }}
     >
-      <div  style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '220px',
-        height: "30px"
-      }}>{textToCopy} </div>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '220px',
+          height: '30px'
+        }}
+      >
+        {textToCopy}{' '}
+      </div>
       <button
         className="copy-button"
         onClick={handleCopyClick}
