@@ -21,7 +21,16 @@ export function MoveHubList({ bluetoothManager }: IDeviceListProps) {
             gap: '10px'
           }}
         >
-          <div>Move Hub n°{index + 1}</div>{' '}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '30px'
+            }}
+          >
+            Move Hub ID:
+          </div>{' '}
           <CopyToClipboard textToCopy={item.native.id} />
         </div>
       </>

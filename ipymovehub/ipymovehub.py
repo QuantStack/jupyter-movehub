@@ -48,6 +48,7 @@ def wait_for_change(widget, value):
     return future
 
 class Task:
+    """ The task class that can be awaited and has a future as a private property"""
     def __init__(self, widget, task_uuid, task_type):
         self._future = asyncio.Future()
         self._task_uuid = task_uuid
@@ -58,6 +59,7 @@ class Task:
         return self._future.__await__()
 
     def cancel(self):
+        """Method to cancel a task."""
         self._widget.send({
             "event": "cancel-task",
             "task_uuid": self._task_uuid,
@@ -74,9 +76,11 @@ class Task:
             self._future.set_result("finished")
 
     def done(self):
+       """ Method returnin True if the task has finished running."""
        return self._future.done()
     
     def cancelled(self):
+        """Method returning True if the task was cancelled before completing successfully."""
         return self._future.cancelled()
 
 class LedColor(str, Enum):
@@ -109,6 +113,10 @@ class Port(str, Enum):
 
 
 class Sensor(object):
+    """
+    The sensor on the Boost Move Hub.
+    """
+
     def __init__(self, name):
         self.name = name
 
@@ -153,6 +161,7 @@ class MoveHubWidget(DOMWidget):
     _view_module_version = Unicode(module_version).tag(sync=True)
     _device_info = Dict(DEFAULT_DEVICE_INFO, read_only=True).tag(sync=True)
     name = Unicode("device1").tag(sync=True)
+    identifier = Unicode("").tag(sync=True)
 
     def __init__(self, *args, **kwargs):
         super(MoveHubWidget, self).__init__(*args, **kwargs)
@@ -173,8 +182,9 @@ class MoveHubWidget(DOMWidget):
         })
         return task
         
-    # Method that handles with the different comm messages received from the frontend
+    # 
     def _handle_custom_comm_msg(self, _,  content, buffers):
+        """Private method that handles with the different comm messages received from the frontend"""
         event = content.get("event")
         task_uuid = content.get("task_uuid")
         task_type = content.get("task_type")
@@ -183,24 +193,29 @@ class MoveHubWidget(DOMWidget):
         if task is not None and not task.done():
             if event == "task-finished":
                 task._set_result()
-                print(f"Task {task_type} finished")
                 
             if event == "task-cancelled":
                 task._set_cancelled()
-                print(f"Task {task_type} cancelled")
-
+                
             del self._pending_tasks[task_uuid]
     
-    def connect(self):
+    def connect(self, identifier = None):
+        """ Method to create a task with connect as task_type"""
+        if identifier is None:
+            identifier = self.identifier
         return self._create_task(task_type="connect", data={})
     
-    def disconnect(self):
+    def disconnect(self, identifier = None):
+        """ Method to create a task with disconnect as task_type"""
+        if identifier is None:
+            identifier = self.identifier
         return self._create_task(task_type="disconnect", data={}) 
 
     async def _poll(self):
         await wait_for_change(self, "_device_info")
 
     async def get_distance_async(self):
+        """Get the distance from an obstacle"""
         await self._poll()
         d = self._device_info["distance"]
         if d is None:

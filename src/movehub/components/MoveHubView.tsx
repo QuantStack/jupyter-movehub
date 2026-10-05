@@ -37,8 +37,8 @@ export default function MoveHubViewComponent({
       <>
         {!moveHub ? (
           <div>
-            There is no device connected yet. Instantiate a new instance of Move
-            Hub class.
+            Warning: there is no device connected yet. Please call connect
+            method on your widget instance.
           </div>
         ) : (
           <DeviceInfoTableComplete moveHub={moveHub} />
