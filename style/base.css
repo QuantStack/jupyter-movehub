@@ -101,7 +101,7 @@
 .move-validation-button {
   background-color: var(--jp-accept-color-normal);
   font-size: 11px;
-  color: #fff;
+  color: var(--jp-accept-color-foreground, white);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -147,7 +147,8 @@
   gap: 10px;
 }
 
-@media (width <= 450px) {
+@media (width <=450px) {
+
   /* smaller screens */
   .move-input-field-text {
     width: 100px;
@@ -184,7 +185,8 @@
   }
 }
 
-@media (width >= 451px) and (width <= 940px) {
+@media (width >=451px) and (width <=940px) {
+
   /* small screens */
   .vernie-control-grid-container {
     grid-template-columns: repeat(1, 1fr);
@@ -217,7 +219,8 @@
   }
 }
 
-@media (width >= 941px) and (width <= 1270px) {
+@media (width >=941px) and (width <=1270px) {
+
   /* intermediary screens */
   .vernie-control-grid-container {
     grid-template-columns: repeat(2, 1fr);
@@ -283,7 +286,7 @@
 
 .custom-table-th {
   background-color: var(--jp-accept-color-normal);
-  color: white;
+  color: var(--jp-accept-color-foreground, white);
   width: 150px;
   text-align: center;
   border-style: solid;

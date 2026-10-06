@@ -50,15 +50,14 @@ export function ColorSelector({ device }: IMoveHubPanelProps) {
 
   return (
     <div>
-      <h4
+      <h3
         style={{
-          color: 'var(--jp-accept-color-normal)',
           margin: '0',
           padding: '0'
         }}
       >
         LED control
-      </h4>
+      </h3>
       <div className="led-color-main-container">
         <div className="led-color-text" style={{ display: 'flex' }}>
           <p style={{ margin: '8px 0px' }}>Current color</p>
