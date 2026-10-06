@@ -148,7 +148,6 @@
 }
 
 @media (width <=450px) {
-
   /* smaller screens */
   .move-input-field-text {
     width: 100px;
@@ -186,7 +185,6 @@
 }
 
 @media (width >=451px) and (width <=940px) {
-
   /* small screens */
   .vernie-control-grid-container {
     grid-template-columns: repeat(1, 1fr);
@@ -220,7 +218,6 @@
 }
 
 @media (width >=941px) and (width <=1270px) {
-
   /* intermediary screens */
   .vernie-control-grid-container {
     grid-template-columns: repeat(2, 1fr);
