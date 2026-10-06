@@ -16,15 +16,14 @@ export function VernieComponent({
           <Vernie themeManager={themeManager} />
         </div>
         <div className="vernie-control-grid-item-center">
-          <h4
+          <h3
             style={{
-              color: 'var(--jp-accept-color-normal)',
               margin: '0',
               padding: '0'
             }}
           >
             Integrated motors
-          </h4>
+          </h3>
           <MoveForm
             hub={device.hub}
             label={'Drive (cm) or turn (°)'}
@@ -38,15 +37,14 @@ export function VernieComponent({
             dutyCycleDirect={-100}
             dutyCycleIndirect={100}
           />
-          <h4
+          <h3
             style={{
-              color: 'var(--jp-accept-color-normal)',
               margin: '0',
               padding: '0'
             }}
           >
             Other motor(s)
-          </h4>
+          </h3>
           <p style={{ margin: '8px 0', fontWeight: '600' }}>
             Motor 1 on port D
           </p>
