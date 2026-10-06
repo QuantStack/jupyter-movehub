@@ -22,7 +22,7 @@ export function LegoBuildSelector({ device }: IMoveHubPanel) {
       value={selectedValue}
     >
       <option value="" selected hidden>
-        Pick a build
+        Build
       </option>
       {LegoModels.map(model => (
         <option key={model} value={model}>

@@ -31,7 +31,7 @@ export function MoveHubComponent({
           </h4>
           <MoveForm
             hub={device.hub}
-            label={'Turn motors A et B (°)'}
+            label={'Turn motors A and B (°)'}
             actionButton1={'RotateIndirect'}
             actionButton2={'RotateDirect'}
             buttonText1={'Indirect'}
