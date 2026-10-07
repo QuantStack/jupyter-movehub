@@ -1,6 +1,6 @@
 {
     "name": "jupyter-movehub",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "A JupyterLab extension to connect to a Lego Move Hub and drive Legoboost robots.",
     "keywords": [
         "jupyter",
