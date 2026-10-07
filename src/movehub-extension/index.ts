@@ -38,7 +38,7 @@ const moveHubPairingInfo: IPairingInformation = {
     'To pair the Move Hub, press the green button and pick the device in the list.',
   SVGUrl: movehubPairingSVGUrl,
   imageAlt: 'Pairing instructions for the Movehub device',
-  imageWidth: '400px'
+  imageWidth: '300px'
 };
 
 export const movehubRegistryItem: IDeviceTypeRegistryItem = {
