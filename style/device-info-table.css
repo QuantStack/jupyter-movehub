@@ -1,0 +1,50 @@
+.device-info-table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-style: solid;
+  border-width: 1.5px;
+  border-radius: 4px;
+  border-color: var(--jp-layout-color0);
+  color: var(--jp-ui-font-color1);
+  font-size: var(--jp-ui-font-size1);
+  margin-top: 16px;
+  margin-bottom: 16px;
+  width: 100%;
+  table-layout: auto;
+}
+
+.device-info-table-th {
+  background-color: var(--jp-accept-color-normal);
+  color: var(--jp-accept-color-foreground, white);
+  width: 150px;
+  text-align: center;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 4px;
+  border-color: var(--jp-layout-color0);
+  font-family: var(--jp-content-font-family);
+  font-size: var(--jp-content-font-size1);
+  line-height: var(--jp-content-line-height);
+}
+
+.device-info-table-tr {
+  line-height: var(--jp-content-line-height);
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 4px;
+  border-color: var(--jp-layout-color0);
+}
+
+.device-info-table-td {
+  width: 150px;
+  text-align: center;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 4px;
+  border-color: var(--jp-layout-color0);
+  font-family: var(--jp-content-font-family);
+  font-size: var(--jp-content-font-size1);
+  line-height: var(--jp-content-line-height);
+  background-color: var(--jp-layout-color2);
+  color: var(--jp-font-color3);
+}

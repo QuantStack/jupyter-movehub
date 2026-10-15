@@ -32,7 +32,7 @@ export default function DeviceIdentifier({ device }: IMoveHubPanelProps) {
 
   return deviceState.connected === true ? (
     <div style={{ width: '230px', fontSize: '12px', padding: '0 10px' }}>
-      {'Device ID: ' + device.native.id}{' '}
+      {'ID: ' + device.native.id}{' '}
     </div>
   ) : (
     <div style={{ width: '230px' }}> </div>

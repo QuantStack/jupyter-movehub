@@ -1,0 +1,54 @@
+.dashboard {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+.dashboard-row > * {
+  min-width: 0;
+}
+
+.dashboard-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background: var(--jp-layout-color1);
+  border: var(--jp-border-width) solid var(--jp-border-color2);
+  border-radius: 2px;
+  color: var(--jp-ui-font-color1);
+  font-family: var(--jp-ui-font-family);
+  font-size: 14px;
+}
+
+.dashboard-card-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dashboard-card-muted {
+  color: var(--jp-ui-font-color2);
+  font-size: 12px;
+}
+
+.dashboard-card-text {
+  color: var(--jp-ui-font-color0);
+  font-size: 12px;
+}
+
+.dashboard-card-subtitle {
+  color: var(--jp-ui-font-color2);
+  font-size: 14px;
+  font-weight: 600;
+}

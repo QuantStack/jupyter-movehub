@@ -27,7 +27,7 @@ export default function MoveHub({ themeManager }: IBuildProps) {
       <img
         src={MoveHubLightSVGUrl}
         alt="Move Hub represented with LeoCAD"
-        height="220px"
+        height="180px"
       />
     );
   }

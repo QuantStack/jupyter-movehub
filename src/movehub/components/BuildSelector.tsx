@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { HTMLSelect, ReactWidget } from '@jupyterlab/ui-components';
 import { MoveHub } from '../moveHub';
 
-const LegoModels = ['Move Hub', 'Vernie', 'Frankie'];
+const Models = ['Move Hub', 'Vernie'];
 interface IMoveHubPanel {
   device: MoveHub;
 }
 
-export function LegoBuildSelector({ device }: IMoveHubPanel) {
+export function BuildSelector({ device }: IMoveHubPanel) {
   const [selectedValue, setSelectedValue] = useState<string>('-');
 
   const handleModelChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedValue(event.target.value);
-    device.legoBuild.set(event.target.value);
+    device.Build.set(event.target.value);
   };
 
   return (
@@ -24,7 +24,7 @@ export function LegoBuildSelector({ device }: IMoveHubPanel) {
       <option value="" selected hidden>
         Build
       </option>
-      {LegoModels.map(model => (
+      {Models.map(model => (
         <option key={model} value={model}>
           {model}
         </option>
@@ -33,7 +33,7 @@ export function LegoBuildSelector({ device }: IMoveHubPanel) {
   );
 }
 
-export class LegoBuildSelectorWidget extends ReactWidget {
+export class BuildSelectorWidget extends ReactWidget {
   public device: MoveHub;
 
   constructor(device: MoveHub) {
@@ -41,6 +41,6 @@ export class LegoBuildSelectorWidget extends ReactWidget {
     this.device = device;
   }
   render() {
-    return <LegoBuildSelector device={this.device} />;
+    return <BuildSelector device={this.device} />;
   }
 }

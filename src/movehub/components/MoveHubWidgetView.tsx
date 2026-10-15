@@ -1,7 +1,7 @@
 import React from 'react';
 import { IBluetoothManager } from '@jupyter-bluetooth-manager/bluetooth';
 import { MoveHubList } from './MoveHubList';
-import { DeviceInfoTableComplete } from './DeviceInfoTableComplete';
+import { DeviceInfoTable } from './DeviceInfoTable';
 import { MoveHub } from '../moveHub';
 
 interface IMoveHubViewProps {
@@ -10,7 +10,7 @@ interface IMoveHubViewProps {
   moveHub: MoveHub | undefined;
 }
 
-export default function MoveHubViewComponent({
+export default function MoveHubWidgetView({
   areMoveHubsAlreadyConnected,
   bluetoothManager,
   moveHub
@@ -21,14 +21,14 @@ export default function MoveHubViewComponent({
         {!moveHub ? (
           <>
             <div>
-              Warning: there are already one or more Lego Move Hubs connected.
-              If you want to use one of them, you can copy paste its ID from the
+              Warning: there are already one or more Move Hubs connected. If you
+              want to use one of them, you can copy paste its ID from the
               clipboard:{' '}
             </div>
             <MoveHubList bluetoothManager={bluetoothManager} />
           </>
         ) : (
-          <DeviceInfoTableComplete moveHub={moveHub} />
+          <DeviceInfoTable moveHub={moveHub} />
         )}
       </>
     );
@@ -41,7 +41,7 @@ export default function MoveHubViewComponent({
             method on your widget instance.
           </div>
         ) : (
-          <DeviceInfoTableComplete moveHub={moveHub} />
+          <DeviceInfoTable moveHub={moveHub} />
         )}
       </>
     );

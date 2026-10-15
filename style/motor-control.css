@@ -1,0 +1,125 @@
+/* MotorControl and DualMotorControl components classes */
+
+.motor-control {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--jp-layout-color1);
+  color: var(--jp-ui-font-color1);
+  font-family: var(--jp-ui-font-family);
+}
+
+.motor-control-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.motor-control-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.motor-control-input {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 44px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border: var(--jp-border-width) solid var(--jp-border-color1);
+  border-radius: 8px;
+  background: var(--jp-layout-color1);
+  color: var(--jp-ui-font-color2);
+}
+
+.motor-control-input:focus-within {
+  outline: 2px solid var(--jp-brand-color1);
+  outline-offset: 2px;
+}
+
+.motor-control-input input {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--jp-ui-font-color1);
+  font-family: var(--jp-code-font-family);
+  font-size: 12px;
+}
+
+.motor-control-validation-button {
+  margin-left: auto;
+  height: 44px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--jp-brand-color1);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.motor-control-validation-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.motor-control button:focus-visible {
+  outline: 2px solid var(--jp-brand-color1);
+  outline-offset: 2px;
+}
+
+.motor-control-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.motor-control-field-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--jp-ui-font-color2);
+}
+
+.motor-control-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  align-items: end;
+  margin: 10px 0;
+}
+
+.motor-control-grid .motor-control-field {
+  gap: 4px;
+  min-width: 0;
+}
+
+.motor-control-grid .motor-control-input {
+  width: 100%;
+}
+
+.motor-control-grid .motor-control-validation-button {
+  width: 100%;
+  margin-left: 0;
+}
+
+/* Telecommand component classes */
+.telecommand-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  align-items: end; /* the Run button lines up with the inputs, under the labels */
+  margin: 10px 0;
+}
+
+.telecommand-button {
+  background-color: transparent;
+  border-width: 0;
+  padding: 0;
+  width: 48px;
+}

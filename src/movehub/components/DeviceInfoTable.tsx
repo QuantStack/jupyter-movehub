@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Poll } from '@lumino/polling';
 import { DeviceInfo } from '../movehub-control/types';
 import { defaultDeviceInfo, MoveHub } from '../moveHub';
+import ColoredCircleWithText from './ColoredCircleWithText';
 
 export function DeviceInfoTable({ moveHub }: { moveHub: MoveHub }) {
   const [deviceState, setDeviceState] = useState<DeviceInfo>(defaultDeviceInfo);
@@ -29,52 +30,101 @@ export function DeviceInfoTable({ moveHub }: { moveHub: MoveHub }) {
   }, [moveHub.deviceInfo]);
   return (
     <>
-      <table className="custom-table">
-        <thead className="custom-table-thead">
-          <tr className="custom-table-tr">
-            <th className="custom-table-th"> </th>
-            <th className="custom-table-th">MAC Address</th>
-            <th className="custom-table-th">Roll</th>
-            <th className="custom-table-th">Pitch</th>
-            <th className="custom-table-th">Yaw</th>
-            <th className="custom-table-th">Distance</th>
-            <th className="custom-table-th">Color</th>
+      <table className="device-info-table">
+        <thead className="device-info-table-thead">
+          <tr className="device-info-table-tr">
+            <th className="device-info-table-th"></th>
+            <th className="device-info-table-th">Status</th>
+            <th className="device-info-table-th">MAC address</th>
+            <th className="device-info-table-th">Identifier</th>
+            <th className="device-info-table-th">Led color</th>
+            <th className="device-info-table-th">Battery</th>
           </tr>
         </thead>
         <tbody>
-          <tr className="custom-table-tr">
-            <td className="custom-table-td" style={{ fontWeight: '600' }}>
-              {'Information / Sensors'}
+          <tr className="device-info-table-tr">
+            <td className="device-info-table-td" style={{ fontWeight: '600' }}>
+              {'Status'}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
               {deviceState.connected ? (
-                `${deviceState.primaryMACAddress}`
+                <ColoredCircleWithText color={'green'} text={'connected'} />
+              ) : (
+                <ColoredCircleWithText color={'red'} text={'disconnected'} />
+              )}
+            </td>
+            <td className="device-info-table-td">
+              {deviceState.connected ? (
+                <div>{deviceState.primaryMACAddress}</div>
               ) : (
                 <div></div>
               )}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
+              {deviceState.connected ? (
+                <div>{deviceState.identifier}</div>
+              ) : (
+                <div></div>
+              )}
+            </td>
+            <td className="device-info-table-td">
+              {deviceState.connected && deviceState.ledColor ? (
+                <ColoredCircleWithText
+                  color={deviceState.ledColor}
+                  text={deviceState.ledColor}
+                />
+              ) : (
+                <div></div>
+              )}
+            </td>
+            <td className="device-info-table-td">
+              {deviceState.connected && deviceState.batteryLevel ? (
+                <div>{deviceState.batteryLevel + '%'}</div>
+              ) : (
+                <div></div>
+              )}{' '}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table className="device-info-table">
+        <thead className="device-info-table-thead">
+          <tr className="device-info-table-tr">
+            <th className="device-info-table-th"> </th>
+            <th className="device-info-table-th">Roll</th>
+            <th className="device-info-table-th">Pitch</th>
+            <th className="device-info-table-th">Yaw</th>
+            <th className="device-info-table-th">Distance</th>
+            <th className="device-info-table-th">Color</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="device-info-table-tr">
+            <td className="device-info-table-td" style={{ fontWeight: '600' }}>
+              {'Sensors'}
+            </td>
+            <td className="device-info-table-td">
               {deviceState.connected ? (
                 `${deviceState.tilt.roll} °`
               ) : (
                 <div></div>
               )}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
               {deviceState.connected ? (
                 `${deviceState.tilt.pitch} °`
               ) : (
                 <div></div>
               )}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
               {deviceState.connected ? (
                 `${deviceState.tilt.yaw} °`
               ) : (
                 <div></div>
               )}{' '}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
               {deviceState.connected ? (
                 deviceState.distance === Infinity ? (
                   'Infinity'
@@ -85,7 +135,7 @@ export function DeviceInfoTable({ moveHub }: { moveHub: MoveHub }) {
                 <div></div>
               )}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
               {deviceState.connected ? (
                 <div>{deviceState.color}</div>
               ) : (
@@ -95,52 +145,52 @@ export function DeviceInfoTable({ moveHub }: { moveHub: MoveHub }) {
           </tr>
         </tbody>
       </table>
-      <table className="custom-table">
-        <thead className="custom-table-thead">
-          <tr className="custom-table-tr">
-            <th className="custom-table-th"> </th>
-            <th className="custom-table-th">Port A</th>
-            <th className="custom-table-th">Port B</th>
-            <th className="custom-table-th">Port AB</th>
-            <th className="custom-table-th">Port C</th>
-            <th className="custom-table-th">Port D</th>
+      <table className="device-info-table">
+        <thead className="device-info-table-thead">
+          <tr className="device-info-table-tr">
+            <th className="device-info-table-th"> </th>
+            <th className="device-info-table-th">Port A</th>
+            <th className="device-info-table-th">Port B</th>
+            <th className="device-info-table-th">Port AB</th>
+            <th className="device-info-table-th">Port C</th>
+            <th className="device-info-table-th">Port D</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td className="custom-table-td" style={{ fontWeight: '600' }}>
+            <td className="device-info-table-td" style={{ fontWeight: '600' }}>
               {' '}
               Angle{' '}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
               {deviceState.connected ? (
                 `${deviceState.ports.A.value} ° `
               ) : (
                 <div></div>
               )}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
               {deviceState.connected ? (
                 `${deviceState.ports.B.value} ° `
               ) : (
                 <div></div>
               )}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
               {deviceState.connected ? (
                 `${deviceState.ports.AB.value} ° `
               ) : (
                 <div></div>
               )}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
               {deviceState.connected ? (
                 `${deviceState.ports.C.value} ° `
               ) : (
                 <div></div>
               )}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
               {deviceState.connected ? (
                 `${deviceState.ports.D.value} ° `
               ) : (
@@ -148,40 +198,40 @@ export function DeviceInfoTable({ moveHub }: { moveHub: MoveHub }) {
               )}
             </td>
           </tr>
-          <tr className="custom-table-tr">
-            <td className="custom-table-td" style={{ fontWeight: '600' }}>
+          <tr className="device-info-table-tr">
+            <td className="device-info-table-td" style={{ fontWeight: '600' }}>
               {' '}
               Action{' '}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
               {deviceState.connected ? (
                 `${deviceState.ports.A.action}`
               ) : (
                 <div></div>
               )}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
               {deviceState.connected ? (
                 `${deviceState.ports.B.action}`
               ) : (
                 <div></div>
               )}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
               {deviceState.connected ? (
                 `${deviceState.ports.AB.action}`
               ) : (
                 <div></div>
               )}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
               {deviceState.connected ? (
                 `${deviceState.ports.C.action}`
               ) : (
                 <div></div>
               )}
             </td>
-            <td className="custom-table-td">
+            <td className="device-info-table-td">
               {deviceState.connected ? (
                 `${deviceState.ports.D.action}`
               ) : (

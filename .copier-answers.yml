@@ -9,8 +9,8 @@ has_binder: false
 has_settings: true
 kind: frontend
 labextension_name: jupyter-movehub
-project_short_description: A JupyterLab extension to connect to a Lego Move Hub and
-    drive Legoboost robots.
+project_short_description: A JupyterLab extension to connect to a Move Hub and
+    drive robots.
 python_name: ipymovehub
 repository: https://github.com/QuantStack/jupyter-movehub
 test: true

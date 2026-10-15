@@ -1,0 +1,28 @@
+.colored-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  margin: 0 8px;
+  border: solid 0.5px;
+}
+
+.connection-status-button {
+  width: 29px;
+  height: 29px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.connection-status-menu {
+  width: auto;
+  height: auto;
+}
+
+.colored-circle-text {
+  font-size: 11px;
+}
