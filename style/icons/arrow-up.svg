@@ -81,7 +81,7 @@
     <g
        id="g2">
       <rect
-         style="fill:#1976d2;fill-opacity:1;stroke:none;stroke-width:0.5625;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:var(--jp-brand-color1);fill-opacity:1;stroke:none;stroke-width:0.5625;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          id="rect5"
          width="54"
          height="54"
@@ -89,7 +89,7 @@
          y="-65.38707"
          ry="10.983046" />
       <path
-         style="fill:none;stroke:#ffffff;stroke-width:2.8125;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#marker3)"
+         style="fill:none;stroke:var(--jp-accept-color-foreground, #ffffff);stroke-width:2.8125;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#marker3)"
          d="M 99.419478,-22.717059 V -43.40389"
          id="path2" />
     </g>
