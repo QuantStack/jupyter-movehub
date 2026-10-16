@@ -2138,21 +2138,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyter-bluetooth-manager/bluetooth-extension@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "@jupyter-bluetooth-manager/bluetooth-extension@npm:0.3.1"
+"@jupyter-bluetooth-manager/bluetooth-extension@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "@jupyter-bluetooth-manager/bluetooth-extension@npm:0.3.2"
   dependencies:
-    "@jupyter-bluetooth-manager/bluetooth": ^0.3.1
+    "@jupyter-bluetooth-manager/bluetooth": ^0.3.2
     "@jupyterlab/application": ^4.5.10
     "@jupyterlab/builder": ^4.5.10
-  checksum: b201479a60071c4431d9b36218f8ad43f86f9d72311eb7b9f886a0c423b5ae4eb30a804f7ec1e66433029fd663d32ade0ab6f01f402132c431cfd1c20372eec4
+  checksum: e3568df69a23749ce5d0686acc949e08b524e61fdf745e6d2e2860cc6ee6693260a1c46ea88b522af24b74116e8a7e4666a433e9962ba070f4bab69e2a30001e
   languageName: node
   linkType: hard
 
-"@jupyter-bluetooth-manager/bluetooth@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "@jupyter-bluetooth-manager/bluetooth@npm:0.3.1"
-  checksum: d88c673ed89c95d62fbec3284caf471db3b04f88c1afde48fc7eda6e0e908badf30158d33062bfd40bf33c7f0072c1f7fad78e7e34e74e1e8f4983f73e3632f7
+"@jupyter-bluetooth-manager/bluetooth@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "@jupyter-bluetooth-manager/bluetooth@npm:0.3.2"
+  checksum: f3ad44c298032f7c3e0f7f18719ba40b21e071965292b900636aad6ea04756e1457b8b81f2c0f79dc3aa3062a070d13be32d9a116b3c9a6d35d726d90e81610f
   languageName: node
   linkType: hard
 
@@ -8231,8 +8231,8 @@ __metadata:
   resolution: "jupyter-movehub@workspace:."
   dependencies:
     "@eslint/js": ^9.0.0
-    "@jupyter-bluetooth-manager/bluetooth": ^0.3.1
-    "@jupyter-bluetooth-manager/bluetooth-extension": ^0.3.1
+    "@jupyter-bluetooth-manager/bluetooth": ^0.3.2
+    "@jupyter-bluetooth-manager/bluetooth-extension": ^0.3.2
     "@jupyter-widgets/base": ^1.1.10 || ^2 || ^3 || ^4 || ^5 || ^6
     "@jupyter/builder": ^1.2.0
     "@jupyter/eslint-plugin": ^0.0.5
