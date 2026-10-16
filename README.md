@@ -1,6 +1,6 @@
 # ipymovehub
 
-A JupyterLab extension to connect to a Lego Move Hub and drive Legoboost robots.
+A JupyterLab extension to connect to a Move Hub and drive robots.
 
 ## Requirements
 

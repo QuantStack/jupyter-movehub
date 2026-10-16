@@ -32,8 +32,7 @@ import { MoveHub } from '../movehub/moveHub';
 import * as ReactDOMClient from 'react-dom/client';
 // @ts-expect-error To be fixed
 import { Root } from 'react-dom/client';
-//import { DeviceInfoTableComplete } from './components/DeviceInfoTableComplete';
-import MoveHubViewComponent from '../movehub/components/MoveHubView';
+import MoveHubWidgetView from '../movehub/components/MoveHubWidgetView';
 
 export class MoveHubModel extends DOMWidgetModel {
   defaults() {
@@ -315,7 +314,7 @@ export class MoveHubView extends DOMWidgetView {
     const areDevicesConnected =
       MoveHubModel.bluetoothManager.deviceList.length !== 0;
     this.root?.render(
-      <MoveHubViewComponent
+      <MoveHubWidgetView
         areMoveHubsAlreadyConnected={areDevicesConnected}
         bluetoothManager={MoveHubModel.bluetoothManager}
         moveHub={moveHub}

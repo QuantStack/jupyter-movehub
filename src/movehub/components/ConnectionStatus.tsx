@@ -60,7 +60,7 @@ export class ConnectionStatusWidget extends ReactWidget {
       command: connectMoveHub,
       args: { deviceID }
     });
-    this.menu.addClass('jp-connection-status-menu');
+    this.menu.addClass('connection-status-menu');
   }
 
   openMenu(event: React.MouseEvent<HTMLDivElement>) {
@@ -76,7 +76,7 @@ export class ConnectionStatusWidget extends ReactWidget {
       <div
         title="Open Connection Status Menu"
         onClick={event => this.openMenu(event)}
-        className="jp-connection-status-button"
+        className="connection-status-button"
       >
         <ConnectionStatus device={this.device} />
       </div>

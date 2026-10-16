@@ -12,15 +12,15 @@ import {
   IPairingInformation
 } from '@jupyter-bluetooth-manager/bluetooth';
 import { MoveHub } from '../movehub/moveHub';
-import { LegoBrickIcon } from '../movehub/icon';
+import { BrickIcon } from '../movehub/icon';
 import { MoveHubPanelWidget } from '../movehub/components/MoveHubPanel';
-import { LegoBuildSelectorWidget } from '../movehub/components/LegoBuildSelector';
+import { BuildSelectorWidget } from '../movehub/components/BuildSelector';
 import { BatteryWidget } from '../movehub/components/BatteryGauge';
 import { DeviceIdentifierWidget } from '../movehub/components/DeviceIdentifier';
 import { ConnectionStatusWidget } from '../movehub/components/ConnectionStatus';
 import ipymovehubPlugin from './plugin';
-import movehubPairingSVG from '../../style/images/MovehubPairing.svg';
-const movehubPairingSVGUrl = `data:image/svg+xml;base64,${btoa(movehubPairingSVG)}`;
+import moveHubPairingSVG from '../../style/images/MoveHubPairing.svg';
+const moveHubPairingSVGUrl = `data:image/svg+xml;base64,${btoa(moveHubPairingSVG)}`;
 export const addMoveHubControlPanel =
   'jupyter-movehub:add-movehub-control-panel';
 export const addMoveHubControlPanelFromLauncher =
@@ -36,13 +36,13 @@ import { Dialog } from '@jupyterlab/apputils';
 const moveHubPairingInfo: IPairingInformation = {
   instructions:
     'To pair the Move Hub, press the green button and pick the device in the list.',
-  SVGUrl: movehubPairingSVGUrl,
+  SVGUrl: moveHubPairingSVGUrl,
   imageAlt: 'Pairing instructions for the Movehub device',
   imageWidth: '300px'
 };
 
 export const movehubRegistryItem: IDeviceTypeRegistryItem = {
-  deviceType: 'LEGO® Move Hub',
+  deviceType: 'Move Hub',
   pairingInfo: moveHubPairingInfo,
   options: {
     acceptAllDevices: false,
@@ -76,20 +76,17 @@ function createContentForMoveHubPanel(
     'connection-status',
     new ConnectionStatusWidget(device, app.commands)
   );
-  main.toolbar.addItem(
-    'select-lego-model',
-    new LegoBuildSelectorWidget(device)
-  );
+  main.toolbar.addItem('select-model', new BuildSelectorWidget(device));
   toolbar.addItem('spacer', Toolbar.createSpacerItem());
   main.toolbar.addItem(
     'battery-gauge',
     new BatteryWidget(device, themeManager)
   );
   main.toolbar.addItem('device-identifier', new DeviceIdentifierWidget(device));
-  main.id = 'lego-movehub-control-panel';
-  main.title.label = 'LEGO® Move Hub';
+  main.id = 'movehub-control-panel';
+  main.title.label = 'Move Hub';
   main.title.closable = true;
-  main.title.icon = LegoBrickIcon;
+  main.title.icon = BrickIcon;
   app.shell.add(main, 'main');
 }
 
@@ -145,7 +142,7 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
       },
       caption: trans.__('Open Move Hub panel'),
       label: trans.__('Open Move Hub Panel'),
-      icon: LegoBrickIcon
+      icon: BrickIcon
     });
 
     app.commands.addCommand(addMoveHubControlPanelFromLauncher, {
@@ -183,7 +180,7 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
       },
       caption: trans.__('Move Hub'),
       label: trans.__('Move Hub'),
-      icon: LegoBrickIcon
+      icon: BrickIcon
     });
 
     app.commands.addCommand(disconnectMoveHub, {
@@ -237,7 +234,7 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
       },
       caption: 'Connect Move Hub',
       label: 'Connect Move Hub',
-      icon: LegoBrickIcon,
+      icon: BrickIcon,
       isEnabled: args => {
         const selectedDevice = bluetoothManager.deviceList.find(
           device => device.native.id === (args.deviceID as string)

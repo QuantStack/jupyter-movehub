@@ -77,13 +77,12 @@ const batteryCustomizationDark = {
   }
 };
 
-export default function BatteryComponent({
+export default function Battery({
   device,
   themeManager
 }: IMoveHubPanelWithThemeProps) {
   const [deviceState, setDeviceState] = useState<DeviceInfo>(defaultDeviceInfo);
   const theme = themeManager.theme;
-  console.log('theme:', theme);
 
   useEffect(() => {
     const poll = new Poll({
@@ -152,8 +151,6 @@ export class BatteryWidget extends ReactWidget {
   }
 
   render() {
-    return (
-      <BatteryComponent device={this.device} themeManager={this.themeManager} />
-    );
+    return <Battery device={this.device} themeManager={this.themeManager} />;
   }
 }

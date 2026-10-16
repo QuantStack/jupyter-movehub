@@ -53,7 +53,7 @@ export class MoveHub extends BluetoothManager.Device {
   public controlData: ControlData;
   public deviceInfo: DeviceInfo;
   public defaultConfiguration: IDeviceConfiguration;
-  public legoBuild: ObservableValue;
+  public Build: ObservableValue;
 
   /**
    * Input data to used on manual and AI control
@@ -73,7 +73,7 @@ export class MoveHub extends BluetoothManager.Device {
     };
 
     this.deviceInfo = defaultDeviceInfo;
-    this.legoBuild = new ObservableValue('Move Hub');
+    this.Build = new ObservableValue('Move Hub');
 
     this.defaultConfiguration = {
       distanceModifier: DEFAULT_CONFIG.METRIC_MODIFIER,

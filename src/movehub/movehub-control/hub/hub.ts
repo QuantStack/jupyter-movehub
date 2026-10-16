@@ -52,7 +52,7 @@ export type LedColor =
   | 'red'
   | 'white';
 
-/* For the detail of the Lego boost protocol, please visit : https://lego.github.io/lego-ble-wireless-protocol-docs/*/
+/* For details, please visit : https://lego.github.io/lego-ble-wireless-protocol-docs/
 /* Example of hub properties message
 /* The message header is always 3 bytes long */
 /* byte 0 : message length */
