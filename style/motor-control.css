@@ -58,7 +58,7 @@
   border: 0;
   border-radius: 8px;
   background: var(--jp-brand-color1);
-  color: #fff;
+  color: var(--jp-accept-color-foreground, white);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -106,20 +106,4 @@
 .motor-control-grid .motor-control-validation-button {
   width: 100%;
   margin-left: 0;
-}
-
-/* Telecommand component classes */
-.telecommand-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 10px;
-  align-items: end; /* the Run button lines up with the inputs, under the labels */
-  margin: 10px 0;
-}
-
-.telecommand-button {
-  background-color: transparent;
-  border-width: 0;
-  padding: 0;
-  width: 48px;
 }

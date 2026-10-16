@@ -53,19 +53,19 @@
       <g
          id="g24"
          transform="matrix(-0.8,0,0,0.8,304.99286,50.775908)"
-         style="stroke:#ffffff;stroke-opacity:1">
+         style="stroke:var(--jp-accept-color-foreground, #ffffff);stroke-opacity:1">
         <g
            id="g22"
            transform="translate(0,-0.75930996)"
-           style="stroke:#ffffff;stroke-opacity:1">
+           style="stroke:var(--jp-accept-color-foreground, #ffffff);stroke-opacity:1">
           <g
              id="g1"
-             style="stroke:#ffffff;stroke-opacity:1">
+             style="stroke:var(--jp-accept-color-foreground, #ffffff);stroke-opacity:1">
             <g
                id="g2"
-               style="stroke:#ffffff;stroke-opacity:1">
+               style="stroke:var(--jp-accept-color-foreground, #ffffff);stroke-opacity:1">
               <rect
-                 style="opacity:1;fill:#1976d2;fill-opacity:1;stroke:none;stroke-width:0.330729;stroke-dasharray:0.661458, 1.32292;stroke-dashoffset:0;stroke-opacity:1"
+                 style="opacity:1;fill:var(--jp-brand-color1);fill-opacity:1;stroke:none;stroke-width:0.330729;stroke-dasharray:0.661458, 1.32292;stroke-dashoffset:0;stroke-opacity:1"
                  id="rect5"
                  width="15.875"
                  height="15.875"
@@ -75,24 +75,24 @@
               <g
                  id="g3"
                  transform="matrix(-1.6,0,0,1.6,484.15401,-99.043283)"
-                 style="stroke:#ffffff;stroke-opacity:1">
+                 style="stroke:var(--jp-accept-color-foreground, #ffffff);stroke-opacity:1">
                 <g
                    id="g5"
-                   style="stroke:#ffffff;stroke-opacity:1">
+                   style="stroke:var(--jp-accept-color-foreground, #ffffff);stroke-opacity:1">
                   <g
                      id="g6"
                      transform="matrix(0.8,0,0,0.8,38.272025,35.075376)">
                     <path
-                       style="opacity:1;fill:none;stroke:#ffffff;stroke-width:0.645955;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#RoundedArrow)"
+                       style="opacity:1;fill:none;stroke:var(--jp-accept-color-foreground, #ffffff);stroke-width:0.645955;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#RoundedArrow)"
                        id="path3-2"
                        d="m -187.72745,-176.45844 a 3.6160078,3.6159852 0 0 1 -1.08034,2.57795 3.6160078,3.6159852 0 0 1 -2.59546,1.03755"
                        transform="scale(-1)" />
                     <g
                        id="g4"
                        transform="rotate(90,191.8595,175.72119)"
-                       style="stroke:#ffffff;stroke-opacity:1">
+                       style="stroke:var(--jp-accept-color-foreground, #ffffff);stroke-opacity:1">
                       <ellipse
-                         style="opacity:1;fill:none;stroke:#ffffff;stroke-width:0.258382;stroke-dasharray:0.258382, 0.258382;stroke-dashoffset:0;stroke-opacity:1"
+                         style="opacity:1;fill:none;stroke:var(--jp-accept-color-foreground, #ffffff);stroke-width:0.258382;stroke-dasharray:0.258382, 0.258382;stroke-dashoffset:0;stroke-opacity:1"
                          id="path3"
                          cx="-192.56577"
                          cy="-176.2308"
@@ -107,7 +107,7 @@
                          d="m 191.59748,176.36579 h -3.74525 v 0"
                          id="path6" />
                       <path
-                         style="fill:#d40000;stroke:#ffffff;stroke-width:0.258382;stroke-dasharray:0.258382, 0.258382;stroke-dashoffset:0;stroke-opacity:1"
+                         style="fill:#d40000;stroke:var(--jp-accept-color-foreground, #ffffff);stroke-width:0.258382;stroke-dasharray:0.258382, 0.258382;stroke-dashoffset:0;stroke-opacity:1"
                          d="m 191.46812,176.48108 v -3.74525 0"
                          id="path6-2" />
                     </g>
