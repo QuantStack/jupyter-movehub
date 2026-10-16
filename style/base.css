@@ -11,11 +11,12 @@
 */
 
 /* style/base.css */
-@import url('./sensors.css');
-@import url('./motor-control.css');
-@import url('./led-control.css');
-@import url('./dashboard.css');
 @import url('./device-info-table.css');
+@import url('./dashboard.css');
+@import url('./led-control.css');
+@import url('./motor-control.css');
+@import url('./sensors.css');
+@import url('./telecommand.css');
 @import url('./toolbar.css');
 
 .jp-movehub-panel-content {
