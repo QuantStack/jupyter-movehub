@@ -142,19 +142,19 @@ export class HubAsync extends Hub {
   afterInitialization() {
     this.hubDisconnected = null;
     this.portData = {
-      A: { angle: 0 },
-      B: { angle: 0 },
-      AB: { angle: 0 },
-      C: { angle: 0 },
-      D: { angle: 0 },
-      LED: { angle: 0 }
+      A: { value: 0 },
+      B: { value: 0 },
+      AB: { value: 0 },
+      C: { value: 0 },
+      D: { value: 0 },
+      LED: { value: 0 }
     };
     this.useMetric = true;
     this.modifier = 1;
 
     this.emitter.on(
       'rotation',
-      rotation => (this.portData[rotation.port].value = rotation.value)
+      rotation => (this.portData[rotation.port].value = rotation.angle)
     );
     this.emitter.on('disconnect', () => (this.hubDisconnected = true));
     this.emitter.on('distance', distance => (this.distance = distance));
