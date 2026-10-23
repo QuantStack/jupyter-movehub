@@ -29,10 +29,20 @@
   height: 44px;
   padding: 0 12px;
   box-sizing: border-box;
-  border: var(--jp-border-width) solid var(--jp-border-color1);
+  border: var(--jp-border-width) solid var(--jp-input-border-color);
   border-radius: 8px;
-  background: var(--jp-layout-color1);
+  background: var(--jp-input-background);
   color: var(--jp-ui-font-color2);
+  box-shadow: var(--jp-input-box-shadow-color);
+}
+
+.motor-control-input :hover {
+  background: var(--jp-input-hover-background);
+}
+
+.motor-control-input :active {
+  background: var(--jp-input-active-background);
+  box-shadow: var(--jp-input-active-box-shadow-color);
 }
 
 .motor-control-input:focus-within {
@@ -56,12 +66,15 @@
   height: 44px;
   padding: 0 22px;
   border: 0;
-  border-radius: 8px;
-  background: var(--jp-brand-color1);
+  background: var(--jp-accept-color-normal, --jp-brand-color1);
   color: var(--jp-accept-color-foreground, white);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
+}
+
+.motor-control-validation-button:hover {
+  background: var(--jp-accept-color-hover, --jp-brand-color0);
 }
 
 .motor-control-validation-button:disabled {
@@ -69,8 +82,8 @@
   cursor: not-allowed;
 }
 
-.motor-control button:focus-visible {
-  outline: 2px solid var(--jp-brand-color1);
+.motor-control-validation-button:active {
+  outline: 2px solid var(--jp-accept-color-hover, --jp-brand-color0);
   outline-offset: 2px;
 }
 

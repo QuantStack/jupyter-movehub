@@ -22,8 +22,7 @@
 .jp-movehub-panel-content {
   width: 100%;
   box-sizing: border-box;
-  background-color: var(--jp-layout-color1);
-  max-width: 1200px;
+  background-color: var(--jp-layout-color2);
   margin: 0 auto;
   overflow: hidden auto;
   height: 100%;

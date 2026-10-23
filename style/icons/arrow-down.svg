@@ -1,97 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
-   width="48"
-   viewBox="0 0 53.999999 48"
+   width="12.7mm"
+   height="12.7mm"
+   viewBox="0 0 12.7 12.7"
    version="1.1"
-   id="svg6011"
-   height="48"
+   id="svg1"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs6015">
-    <marker
-       style="overflow:visible"
-       id="marker3"
-       refX="0"
-       refY="0"
-       orient="auto-start-reverse"
-       markerWidth="0.8"
-       markerHeight="0.8"
-       viewBox="0 0 1 1"
-       preserveAspectRatio="xMidYMid">
-      <path
-         transform="scale(0.7)"
-         d="m -0.21114562,-4.1055728 6.42229122,3.21114561 a 1,1 90 0 1 0,1.78885438 L -0.21114562,4.1055728 A 1.236068,1.236068 31.717474 0 1 -2,3 v -6 a 1.236068,1.236068 148.28253 0 1 1.78885438,-1.1055728 z"
-         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
-         id="path3" />
-    </marker>
-    <marker
-       style="overflow:visible"
-       id="marker1"
-       refX="0"
-       refY="0"
-       orient="auto-start-reverse"
-       markerWidth="1"
-       markerHeight="1"
-       viewBox="0 0 1 1"
-       preserveAspectRatio="xMidYMid">
-      <path
-         transform="scale(0.7)"
-         d="m -0.21114562,-4.1055728 6.42229122,3.21114561 a 1,1 90 0 1 0,1.78885438 L -0.21114562,4.1055728 A 1.236068,1.236068 31.717474 0 1 -2,3 v -6 a 1.236068,1.236068 148.28253 0 1 1.78885438,-1.1055728 z"
-         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
-         id="path1" />
-    </marker>
-    <marker
-       style="overflow:visible"
-       id="RoundedArrow"
-       refX="0"
-       refY="0"
-       orient="auto-start-reverse"
-       markerWidth="1"
-       markerHeight="1"
-       viewBox="0 0 1 1"
-       preserveAspectRatio="xMidYMid">
-      <path
-         transform="scale(0.7)"
-         d="m -0.21114562,-4.1055728 6.42229122,3.21114561 a 1,1 90 0 1 0,1.78885438 L -0.21114562,4.1055728 A 1.236068,1.236068 31.717474 0 1 -2,3 v -6 a 1.236068,1.236068 148.28253 0 1 1.78885438,-1.1055728 z"
-         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
-         id="path8" />
-    </marker>
-    <marker
-       style="overflow:visible"
-       id="marker5"
-       refX="0"
-       refY="0"
-       orient="auto-start-reverse"
-       markerWidth="1"
-       markerHeight="1"
-       viewBox="0 0 1 1"
-       preserveAspectRatio="xMidYMid">
-      <path
-         style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:round"
-         d="M 3,-3 0,0 3,3"
-         transform="rotate(180,0.125,0)"
-         id="path5" />
-    </marker>
-  </defs>
+     id="defs1" />
   <g
-     id="g1"
-     transform="translate(-72.419479,62.38707)"
-     style="fill:#f9f9f9">
-    <g
-       id="g2">
-      <rect
-         style="fill:var(--jp-brand-color1);fill-opacity:1;stroke:none;stroke-width:0.5625;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         id="rect5"
-         width="54"
-         height="54"
-         x="72.419479"
-         y="-65.38707"
-         ry="10.983046" />
-      <path
-         style="fill:none;stroke:var(--jp-accept-color-foreground, #ffffff);stroke-width:2.8125;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#marker3)"
-         d="M 99.419478,-54.057084 V -33.37025"
-         id="path2" />
-    </g>
+     id="layer1"
+     transform="translate(-152.13542,-70.643753)">
+    <rect
+       style="font-variation-settings:'wght' 700;fill:none;fill-opacity:1;stroke:none;stroke-width:1.29654;stroke-dasharray:none;stroke-opacity:1"
+       id="rect14"
+       width="12.7"
+       height="12.7"
+       x="152.13542"
+       y="-83.34375"
+       transform="scale(1,-1)" />
+    <path
+       style="font-variation-settings:'wght' 700;fill:var(--jp-accept-color-foreground, #ffffff);fill-opacity:1;stroke:none;stroke-width:0.499999;stroke-dasharray:none;stroke-opacity:1"
+       id="path12"
+       d="m 47.313751,46.81875 3.608079,6.249376 -7.216157,0 z"
+       transform="matrix(0.36665407,0,0,-0.42337564,141.13764,100.51044)" />
+    <rect
+       style="font-variation-settings:'wght' 700;fill:var(--jp-accept-color-foreground, #ffffff);fill-opacity:1;stroke:none;stroke-width:0.217481;stroke-dasharray:none;stroke-opacity:1"
+       id="rect13"
+       width="0.75017416"
+       height="4.7624998"
+       x="158.11034"
+       y="-78.061485"
+       transform="scale(1,-1)" />
   </g>
 </svg>

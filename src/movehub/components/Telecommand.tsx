@@ -1,14 +1,17 @@
 import React from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { Poll } from '@lumino/polling';
+import { DeviceInfo } from '../movehub-control/types';
+import { defaultDeviceInfo } from '../moveHub';
 import { MoveHub } from '../moveHub';
 import { IMoveHubPanelWithThemeProps } from './MoveHubPanel';
-import { useRef } from 'react';
-
 import { LabIcon } from '@jupyterlab/ui-components';
 import stopSvgStr from '../../../style/icons/stop.svg';
 import arrowUpSvgStr from '../../../style/icons/arrow-up.svg';
 import arrowDownSvgStr from '../../../style/icons/arrow-down.svg';
 import turnRightSvgStr from '../../../style/icons/turn-right.svg';
 import turnLeftSvgStr from '../../../style/icons/turn-left.svg';
+
 export const stopIcon = new LabIcon({
   name: 'movehub:stop',
   svgstr: stopSvgStr
@@ -43,12 +46,19 @@ interface IControl {
   label: string;
   action: Action;
   direction: number;
+  className?: string;
 }
 
 const CONTROLS: IControl[] = [
   { icon: arrowUpIcon, label: 'Drive forward', action: 'drive', direction: 1 },
   { icon: turnLeftIcon, label: 'Turn left', action: 'turn', direction: -1 },
-  { icon: stopIcon, label: 'Stop', action: 'stop', direction: 0 },
+  {
+    icon: stopIcon,
+    label: 'Stop',
+    action: 'stop',
+    direction: 0,
+    className: 'telecommand-button-stop'
+  },
   { icon: turnRightIcon, label: 'Turn right', action: 'turn', direction: 1 },
   {
     icon: arrowDownIcon,
@@ -60,6 +70,30 @@ const CONTROLS: IControl[] = [
 
 export function Telecommand({ device }: IMoveHubPanelWithThemeProps) {
   const pressStart = useRef(0);
+  const [deviceState, setDeviceState] = useState<DeviceInfo>(defaultDeviceInfo);
+
+  useEffect(() => {
+    const poll = new Poll({
+      auto: true,
+      name: `telecommand-polling`,
+      factory: async () => {
+        setDeviceState({ ...device.deviceInfo });
+      },
+      frequency: {
+        interval: 200,
+        backoff: true
+      },
+      standby: 'when-hidden'
+    });
+
+    poll.start();
+
+    return () => {
+      poll.stop();
+    };
+  }, [device.deviceInfo]);
+
+  const connected = deviceState.connected === true;
 
   const handleDown = () => {
     pressStart.current = Date.now();
@@ -99,11 +133,14 @@ export function Telecommand({ device }: IMoveHubPanelWithThemeProps) {
           <button
             key={control.label}
             type="button"
-            className="telecommand-button"
+            className={['telecommand-button', control.className]
+              .filter(Boolean)
+              .join(' ')}
             aria-label={control.label}
             title={control.label}
             onMouseDown={handleDown}
             onMouseUp={() => handleUp(control)}
+            disabled={!connected}
           >
             <control.icon.react tag="span" className="telecommand-icon" />
           </button>
