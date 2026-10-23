@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Poll } from '@lumino/polling';
-
 import { DeviceInfo } from '../movehub-control/types';
 import { defaultDeviceInfo } from '../moveHub';
 import { IMoveHubPanelWithThemeProps } from './MoveHubPanel';

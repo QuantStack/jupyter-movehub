@@ -28,6 +28,7 @@ export function DeviceInfoTable({ moveHub }: { moveHub: MoveHub }) {
       poll.stop();
     };
   }, [moveHub.deviceInfo]);
+  console.log(deviceState.ledColor);
   return (
     <>
       <table className="device-info-table">
@@ -37,7 +38,6 @@ export function DeviceInfoTable({ moveHub }: { moveHub: MoveHub }) {
             <th className="device-info-table-th">Status</th>
             <th className="device-info-table-th">MAC address</th>
             <th className="device-info-table-th">Identifier</th>
-            <th className="device-info-table-th">Led color</th>
             <th className="device-info-table-th">Battery</th>
           </tr>
         </thead>
@@ -63,16 +63,6 @@ export function DeviceInfoTable({ moveHub }: { moveHub: MoveHub }) {
             <td className="device-info-table-td">
               {deviceState.connected ? (
                 <div>{deviceState.identifier}</div>
-              ) : (
-                <div></div>
-              )}
-            </td>
-            <td className="device-info-table-td">
-              {deviceState.connected && deviceState.ledColor ? (
-                <ColoredCircleWithText
-                  color={deviceState.ledColor}
-                  text={deviceState.ledColor}
-                />
               ) : (
                 <div></div>
               )}
