@@ -28,7 +28,6 @@ export function DeviceInfoTable({ moveHub }: { moveHub: MoveHub }) {
       poll.stop();
     };
   }, [moveHub.deviceInfo]);
-  console.log(deviceState.ledColor);
   return (
     <>
       <table className="device-info-table">

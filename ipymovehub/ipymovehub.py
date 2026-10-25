@@ -36,19 +36,33 @@ import uuid
 def wait_for_change(widget, value):
     """
     Wait for a change in a widget's value.
+
+    The trait change may be notified from another thread than the one
+    running the event loop awaiting the future (the frontend-to-kernel
+    comm message handling), so the future is resolved thread-safely on
+    the loop it was created on.
     """
     future = asyncio.Future()
 
     def getvalue(change):
-        # make the new value available
-        future.set_result(change.new)
         widget.unobserve(getvalue, value)
+
+        def apply():
+            if not future.done():
+                future.set_result(change.new)
+
+        try:
+            future.get_loop().call_soon_threadsafe(apply)
+        except RuntimeError:
+            # The loop is closed: nothing is awaiting the change.
+            pass
 
     widget.observe(getvalue, value)
     return future
 
 class Task:
     """ The task class that can be awaited and has a future as a private property"""
+
     def __init__(self, widget, task_uuid, task_type):
         self._future = asyncio.Future()
         self._task_uuid = task_uuid
@@ -69,16 +83,40 @@ class Task:
         self._future.cancel()
 
     def _set_cancelled(self):
-        self._future.cancel()
-      
+        self._resolve_future(cancelled=True)
+
     def _set_result(self):
-        if not self._future.done():
-            self._future.set_result("finished")
+        self._resolve_future(cancelled=False)
+
+    def _resolve_future(self, cancelled):
+        """Wake up the cell awaiting this task.
+
+        The comm message from the frontend may be processed on another
+        thread than the one running the event loop awaiting the task, so
+        the future must be resolved thread-safely on the loop it was
+        created on.
+        """
+        if self._future.done():
+            return
+        loop = self._future.get_loop()
+
+        def apply():
+            if not self._future.done():
+                if cancelled:
+                    self._future.cancel()
+                else:
+                    self._future.set_result("finished")
+
+        try:
+            loop.call_soon_threadsafe(apply)
+        except RuntimeError:
+            # The loop is closed: nothing is awaiting the task.
+            pass
 
     def done(self):
        """ Method returnin True if the task has finished running."""
        return self._future.done()
-    
+
     def cancelled(self):
         """Method returning True if the task was cancelled before completing successfully."""
         return self._future.cancelled()
@@ -159,7 +197,12 @@ class MoveHubWidget(DOMWidget):
     _view_name = Unicode("MoveHubView").tag(sync=True)
     _view_module = Unicode(module_name).tag(sync=True)
     _view_module_version = Unicode(module_version).tag(sync=True)
-    _device_info = Dict(DEFAULT_DEVICE_INFO, read_only=True).tag(sync=True)
+    # The device info is pushed by the frontend over the custom comm
+    # channel and applied through `set_state`; echoing those updates
+    # back to the frontend would be pure overhead.
+    _device_info = Dict(
+        DEFAULT_DEVICE_INFO, read_only=True
+    ).tag(sync=True, echo_update=False)
     name = Unicode("device1").tag(sync=True)
     identifier = Unicode("").tag(sync=True)
 
@@ -167,13 +210,13 @@ class MoveHubWidget(DOMWidget):
         super(MoveHubWidget, self).__init__(*args, **kwargs)
         self.on_msg(self._handle_custom_comm_msg)
         self._pending_tasks = {}
-    
+
     def _create_task(self, task_type, data):
         task_uuid = str(uuid.uuid4())
         task_type = task_type
         task = Task(widget = self,task_uuid=task_uuid, task_type=task_type)
         self._pending_tasks[task_uuid] = task
-                              
+
         self.send({
             "event": "start-task",
             "task_uuid": task_uuid,
@@ -181,22 +224,32 @@ class MoveHubWidget(DOMWidget):
             "data": data
         })
         return task
-        
-    # 
+
+    #
     def _handle_custom_comm_msg(self, _,  content, buffers):
         """Private method that handles with the different comm messages received from the frontend"""
         event = content.get("event")
+
+        # The device info is pushed by the frontend as a custom message
+        # instead of the widget state sync (which is throttled to one
+        # in-flight message on some stacks and can stall permanently,
+        # see https://github.com/jupyter-widgets/ipywidgets/issues/4048).
+        if event == "device-info":
+            self.set_state({"_device_info": content.get("data", {})})
+            return
+
         task_uuid = content.get("task_uuid")
         task_type = content.get("task_type")
         task = self._pending_tasks.get(task_uuid)
         
-        if task is not None and not task.done():
-            if event == "task-finished":
-                task._set_result()
-                
-            if event == "task-cancelled":
-                task._set_cancelled()
-                
+        if task is not None:
+            if not task.done():
+                if event == "task-finished":
+                    task._set_result()
+
+                if event == "task-cancelled":
+                    task._set_cancelled()
+
             del self._pending_tasks[task_uuid]
     
     def connect(self, identifier = None):
@@ -212,7 +265,22 @@ class MoveHubWidget(DOMWidget):
         return self._create_task(task_type="disconnect", data={}) 
 
     async def _poll(self):
-        await wait_for_change(self, "_device_info")
+        """Wait for the device info to be updated.
+
+        The state pushed by the frontend is applied to the trait value
+        even when trait change notifications are suppressed (which can
+        happen on some kernels when a `hold_trait_notifications` context
+        is left dangling by a cancelled comm message task), so the frame
+        counter is polled directly instead of relying on trait
+        observers.
+        """
+        last_frame = self._device_info.get("polling_frame")
+        while True:
+            await asyncio.sleep(1 / 60)
+            current_frame = self._device_info.get("polling_frame")
+            if current_frame != last_frame:
+                return
+            last_frame = current_frame
 
     async def get_distance_async(self):
         """Get the distance from an obstacle"""

@@ -25,9 +25,17 @@ import {
   ISerializers
 } from '@jupyter-widgets/base';
 import { MODULE_NAME, MODULE_VERSION } from './version';
-import { IBluetoothManager } from '@jupyter-bluetooth-manager/bluetooth';
+import {
+  IBluetoothManager,
+  PairingInfoWidget
+} from '@jupyter-bluetooth-manager/bluetooth';
+import { Dialog } from '@jupyterlab/apputils';
 import { movehubRegistryItem } from '.';
 import { MoveHub } from '../movehub/moveHub';
+import {
+  IScheduledJobHandle,
+  TaskCancelledError
+} from '../movehub/movehub-control/taskScheduler';
 // @ts-expect-error To be fixed
 import * as ReactDOMClient from 'react-dom/client';
 // @ts-expect-error To be fixed
@@ -55,8 +63,17 @@ export class MoveHubModel extends DOMWidgetModel {
       polling_frame: this.polling_frame,
       ...this.movehub.deviceInfo
     };
+    // Update the frontend view.
     this.set('_device_info', device_info);
-    this.save_changes();
+
+    // Push the device info to the kernel over the custom comm channel.
+    // The widget state sync path is throttled by ipywidgets to one
+    // in-flight message, released only by a kernel idle status
+    // acknowledgment; on some stacks the acknowledgment never arrives
+    // and every state update stays buffered forever. Custom messages
+    // are not throttled.
+    // See https://github.com/jupyter-widgets/ipywidgets/issues/4048
+    this.send({ event: 'device-info', data: device_info as any });
   }
 
   poll() {
@@ -65,7 +82,15 @@ export class MoveHubModel extends DOMWidgetModel {
   }
 
   polling() {
-    this.poll();
+    // The polling loop must survive exceptions (e.g. a failed render of
+    // the device info view): a single unhandled error would otherwise
+    // stop the `_device_info` updates and hang every task awaiting a
+    // device info change.
+    try {
+      this.poll();
+    } catch (err) {
+      console.error('Device info polling failed', err);
+    }
     if (!this.stop_polling) {
       this.polling_is_running = true;
       setTimeout(this.polling.bind(this), 16);
@@ -120,9 +145,13 @@ export class MoveHubModel extends DOMWidgetModel {
               throw new Error('Boost is not connected.');
             }*/
 
+            // Motor and LED tasks are scheduled by the MoveHub: commands
+            // targeting overlapping ports are executed in order, commands
+            // on disjoint ports run in parallel.
+            let job: IScheduledJobHandle | null = null;
             switch (content.task_type) {
               case 'motor-time':
-                await this.movehub.motorTimeAsync(
+                job = this.movehub.motorTimeJob(
                   content.data.port,
                   content.data.seconds,
                   content.data.power,
@@ -131,7 +160,7 @@ export class MoveHubModel extends DOMWidgetModel {
                 break;
 
               case 'motor-angle':
-                await this.movehub.motorAngleAsync(
+                job = this.movehub.motorAngleJob(
                   content.data.port,
                   content.data.angle,
                   content.data.power,
@@ -140,7 +169,7 @@ export class MoveHubModel extends DOMWidgetModel {
                 break;
 
               case 'motor-angle-multi':
-                await this.movehub.motorAngleMultiAsync(
+                job = this.movehub.motorAngleMultiJob(
                   content.data.angle,
                   content.data.power_a,
                   content.data.power_b,
@@ -149,7 +178,7 @@ export class MoveHubModel extends DOMWidgetModel {
                 break;
 
               case 'motor-time-multi':
-                await this.movehub.motorTimeMultiAsync(
+                job = this.movehub.motorTimeMultiJob(
                   content.data.seconds,
                   content.data.power_a,
                   content.data.power_b,
@@ -158,12 +187,21 @@ export class MoveHubModel extends DOMWidgetModel {
                 break;
 
               case 'set-led':
-                await this.movehub.ledAsync(content.data.color);
+                job = this.movehub.ledJob(content.data.color);
                 break;
 
               default:
                 console.error('Unknown task type.');
                 break;
+            }
+
+            if (job) {
+              this.tasks.set(content.task_uuid, job);
+              try {
+                await job.promise;
+              } finally {
+                this.tasks.delete(content.task_uuid);
+              }
             }
 
             this.send({
@@ -172,12 +210,14 @@ export class MoveHubModel extends DOMWidgetModel {
               task_type: content.task_type
             });
           } catch (err) {
-            console.error(
-              'task failed for',
-              content.task_uuid,
-              content.task_type,
-              err
-            );
+            if (!(err instanceof TaskCancelledError)) {
+              console.error(
+                'task failed for',
+                content.task_uuid,
+                content.task_type,
+                err
+              );
+            }
             try {
               this.send({
                 event: 'task-cancelled',
@@ -199,23 +239,19 @@ export class MoveHubModel extends DOMWidgetModel {
       switch (content.event) {
         case 'cancel-task':
           try {
-            if (
-              content.task_type === 'motor-time' ||
-              content.task_type === 'motor-angle' ||
-              content.task_type === 'motor-time-multi' ||
-              content.task_type === 'motor-angle-multi'
-            ) {
-              // common stop: zero-power motors
-              this.movehub.motorTimeMulti(0, 0, 0);
+            const job = this.tasks.get(content.task_uuid);
+            if (job) {
+              // The running or queued task is aborted; the `task-cancelled`
+              // message is sent once the task promise rejects.
+              job.cancel();
+            } else {
+              // The task is not scheduled (connect, disconnect) or it has
+              // already finished.
+              this.send({
+                event: 'task-cancelled',
+                task_uuid: content.task_uuid
+              });
             }
-            if (content.task_type === 'set-led') {
-              // common stop: turn off led
-              this.movehub.led('off');
-            }
-            this.send({
-              event: 'task-cancelled',
-              task_uuid: content.task_uuid
-            });
           } catch (err) {
             console.error(
               'task cancel failed for',
@@ -234,8 +270,22 @@ export class MoveHubModel extends DOMWidgetModel {
     const identifier = this.get('identifier');
 
     if (identifier === '') {
-      this.movehub =
-        await MoveHubModel.bluetoothManager.connect(movehubRegistryItem);
+      // Show the pairing information while the browser device chooser
+      // is open, like the connect command does.
+      const body = new PairingInfoWidget(movehubRegistryItem.pairingInfo);
+      const dialog = new Dialog({
+        title: 'Pairing information',
+        body: body,
+        buttons: [Dialog.okButton({ label: 'Close' })]
+      });
+      try {
+        dialog.launch();
+        this.movehub = (await MoveHubModel.bluetoothManager.connect(
+          movehubRegistryItem
+        )) as MoveHub;
+      } finally {
+        dialog.resolve();
+      }
     } else {
       const selectedDevice = MoveHubModel.bluetoothManager.deviceList.find(
         device => device.native.id === identifier
@@ -277,6 +327,7 @@ export class MoveHubModel extends DOMWidgetModel {
   }
 
   movehub: MoveHub;
+  private tasks = new Map<string, IScheduledJobHandle>();
   private polling_frame = 0;
   private polling_is_running = false;
   stop_polling = false;
@@ -301,7 +352,6 @@ export class MoveHubView extends DOMWidgetView {
 
     // Listen for changes to _device_info and re-render
     this.listenTo(model, 'change:_device_info', () => {
-      console.log('Device info has changed');
       this.updateRender();
     });
 
@@ -324,5 +374,11 @@ export class MoveHubView extends DOMWidgetView {
 
   remove() {
     this.root?.unmount();
+    // Drop the reference so that a late `change:_device_info` cannot
+    // render on the unmounted root ("Cannot update an unmounted root").
+    this.root = null;
+    // Unsubscribe the view from the model events; without this, the
+    // removed view would keep reacting to device info updates.
+    super.remove();
   }
 }

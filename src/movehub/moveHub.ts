@@ -12,6 +12,18 @@ import {
 } from '../movehub-extension';
 import { buildCompleteIdentifier } from '@jupyter-bluetooth-manager/bluetooth';
 import { ObservableValue } from '@jupyterlab/observables';
+import {
+  IScheduledJobHandle,
+  TaskScheduler
+} from './movehub-control/taskScheduler';
+
+/**
+ * Physical resources used by a command targeting the given port.
+ * A command on the joint `AB` port uses both motor A and motor B.
+ */
+const portsForTask = (port: string | number): string[] => {
+  return String(port) === 'AB' ? ['A', 'B'] : [String(port)];
+};
 
 export const defaultConfiguration: IDeviceConfiguration = {
   distanceModifier: DEFAULT_CONFIG.METRIC_MODIFIER,
@@ -54,6 +66,7 @@ export class MoveHub extends BluetoothManager.Device {
   public deviceInfo: DeviceInfo;
   public defaultConfiguration: IDeviceConfiguration;
   public Build: ObservableValue;
+  public scheduler: TaskScheduler;
 
   /**
    * Input data to used on manual and AI control
@@ -61,6 +74,7 @@ export class MoveHub extends BluetoothManager.Device {
    */
   constructor(native: BluetoothDevice) {
     super(native);
+    this.scheduler = new TaskScheduler();
     this.controlData = {
       input: null,
       speed: 0,
@@ -199,6 +213,20 @@ export class MoveHub extends BluetoothManager.Device {
 
   /**
    * Control the LED on the Move Hub
+   * @method MoveHub#ledJob
+   * @param {boolean|number|string} color
+   * @returns {IScheduledJobHandle} handle with the job promise and cancel function
+   */
+  ledJob(color: boolean | number | string): IScheduledJobHandle {
+    return this.scheduler.run(
+      ['LED'],
+      () => this.hub.ledAsync(color),
+      () => this.hub.led('off')
+    );
+  }
+
+  /**
+   * Control the LED on the Move Hub
    * @method MoveHub#ledAsync
    * @param {boolean|number|string} color
    * If set to boolean `false` the LED is switched off, if set to `true` the LED will be white.
@@ -210,7 +238,7 @@ export class MoveHub extends BluetoothManager.Device {
     if (!this.preCheck()) {
       return;
     }
-    return await this.hub.ledAsync(color);
+    return await this.ledJob(color).promise;
   }
 
   /**
@@ -225,6 +253,28 @@ export class MoveHub extends BluetoothManager.Device {
       return;
     }
     this.hub.motorTime(port, seconds, dutyCycle);
+  }
+
+  /**
+   * Run a motor for specific time
+   * @method MoveHub#motorTimeJob
+   * @param {string|number} port possible string values: `A`, `B`, `AB`, `C`, `D`.
+   * @param {number} seconds
+   * @param {number} [dutyCycle=100] motor power percentage from `-100` to `100`
+   * @param {boolean} [wait=false]
+   * @returns {IScheduledJobHandle} handle with the job promise and cancel function
+   */
+  motorTimeJob(
+    port: string | number,
+    seconds: number,
+    dutyCycle: number = 100,
+    wait: boolean = true
+  ): IScheduledJobHandle {
+    return this.scheduler.run(
+      portsForTask(port),
+      () => this.hub.motorTimeAsync(port, seconds, dutyCycle, wait),
+      () => this.hub.motorTime(port, 0, 0)
+    );
   }
 
   /**
@@ -246,7 +296,7 @@ export class MoveHub extends BluetoothManager.Device {
     if (!this.preCheck()) {
       return;
     }
-    await this.hub.motorTimeAsync(port, seconds, dutyCycle, wait);
+    await this.motorTimeJob(port, seconds, dutyCycle, wait).promise;
   }
 
   /**
@@ -271,6 +321,28 @@ export class MoveHub extends BluetoothManager.Device {
 
   /**
    * Run both motors (A and B) for specific time
+   * @method MoveHub#motorTimeMultiJob
+   * @param {number} seconds
+   * @param {number} [dutyCycleA=100] motor power percentage from `-100` to `100`
+   * @param {number} [dutyCycleB=100] motor power percentage from `-100` to `100`
+   * @param {boolean} [wait=false]
+   * @returns {IScheduledJobHandle} handle with the job promise and cancel function
+   */
+  motorTimeMultiJob(
+    seconds: number,
+    dutyCycleA: number = 100,
+    dutyCycleB: number = 100,
+    wait: boolean = true
+  ): IScheduledJobHandle {
+    return this.scheduler.run(
+      ['A', 'B'],
+      () => this.hub.motorTimeMultiAsync(seconds, dutyCycleA, dutyCycleB, wait),
+      () => this.hub.motorTimeMulti(0, 0, 0)
+    );
+  }
+
+  /**
+   * Run both motors (A and B) for specific time
    * @method MoveHub#motorTimeMultiAsync
    * @param {number} seconds
    * @param {number} [dutyCycleA=100] motor power percentage from `-100` to `100`. If a negative value is given rotation
@@ -289,7 +361,7 @@ export class MoveHub extends BluetoothManager.Device {
     if (!this.preCheck()) {
       return;
     }
-    await this.hub.motorTimeMultiAsync(seconds, dutyCycleA, dutyCycleB, wait);
+    await this.motorTimeMultiJob(seconds, dutyCycleA, dutyCycleB, wait).promise;
   }
 
   /**
@@ -312,6 +384,29 @@ export class MoveHub extends BluetoothManager.Device {
 
   /**
    * Turn a motor by specific angle
+   * @method MoveHub#motorAngleJob
+   * @param {string|number} port possible string values: `A`, `B`, `AB`, `C`, `D`.
+   * @param {number} angle - degrees to turn from `0` to `2147483647`
+   * @param {number} [dutyCycle=100] motor power percentage from `-100` to `100`. If a negative value is given
+   * rotation is counterclockwise.
+   * @param {boolean} [wait=false] will promise wait unitll motorAngle has turned
+   * @returns {IScheduledJobHandle} handle with the job promise and cancel function
+   */
+  motorAngleJob(
+    port: string | number,
+    angle: number,
+    dutyCycle: number = 100,
+    wait: boolean = true
+  ): IScheduledJobHandle {
+    return this.scheduler.run(
+      portsForTask(port),
+      signal => this.hub.motorAngleAsync(port, angle, dutyCycle, wait, signal),
+      () => this.hub.motorTime(port, 0, 0)
+    );
+  }
+
+  /**
+   * Turn a motor by specific angle
    * @method MoveHub#motorAngleAsync
    * @param {string|number} port possible string values: `A`, `B`, `AB`, `C`, `D`.
    * @param {number} angle - degrees to turn from `0` to `2147483647`
@@ -329,7 +424,7 @@ export class MoveHub extends BluetoothManager.Device {
     if (!this.preCheck()) {
       return;
     }
-    await this.hub.motorAngleAsync(port, angle, dutyCycle, wait);
+    await this.motorAngleJob(port, angle, dutyCycle, wait).promise;
   }
 
   /**
@@ -354,6 +449,37 @@ export class MoveHub extends BluetoothManager.Device {
 
   /**
    * Turn both motors (A and B) by specific angle
+   * @method MoveHub#motorAngleMultiJob
+   * @param {number} angle degrees to turn from `0` to `2147483647`
+   * @param {number} [dutyCycleA=100] motor power percentage from `-100` to `100`. If a negative value is given
+   * rotation is counterclockwise.
+   * @param {number} [dutyCycleB=100] motor power percentage from `-100` to `100`. If a negative value is given
+   * rotation is counterclockwise.
+   * @param {boolean} [wait=false] will promise wait unitll motorAngle has turned
+   * @returns {IScheduledJobHandle} handle with the job promise and cancel function
+   */
+  motorAngleMultiJob(
+    angle: number,
+    dutyCycleA: number = 100,
+    dutyCycleB: number = 100,
+    wait: boolean = true
+  ): IScheduledJobHandle {
+    return this.scheduler.run(
+      ['A', 'B'],
+      signal =>
+        this.hub.motorAngleMultiAsync(
+          angle,
+          dutyCycleA,
+          dutyCycleB,
+          wait,
+          signal
+        ),
+      () => this.hub.motorTimeMulti(0, 0, 0)
+    );
+  }
+
+  /**
+   * Turn both motors (A and B) by specific angle
    * @method MoveHub#motorAngleMultiAsync
    * @param {number} angle degrees to turn from `0` to `2147483647`
    * @param {number} [dutyCycleA=100] motor power percentage from `-100` to `100`. If a negative value is given
@@ -372,7 +498,7 @@ export class MoveHub extends BluetoothManager.Device {
     if (!this.preCheck()) {
       return;
     }
-    await this.hub.motorAngleMultiAsync(angle, dutyCycleA, dutyCycleB, wait);
+    await this.motorAngleMultiJob(angle, dutyCycleA, dutyCycleB, wait).promise;
   }
 
   /**
