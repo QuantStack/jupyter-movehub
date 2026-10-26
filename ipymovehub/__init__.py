@@ -7,6 +7,7 @@ from .ipymovehub import (
     MoveHubWidget,
     Port,
     Sensor,
+    TaskFailedError,
 )
 try:
     from ._version import __version__

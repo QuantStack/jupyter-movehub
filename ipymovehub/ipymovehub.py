@@ -60,6 +60,18 @@ def wait_for_change(widget, value):
     widget.observe(getvalue, value)
     return future
 
+class TaskFailedError(RuntimeError):
+    """
+    Raised when a task fails on the frontend, e.g. when a command is
+    sent while the Move Hub is not connected.
+
+    """
+
+    def __init__(self, error):
+        super().__init__(str(error))
+        self.error = error
+
+
 class Task:
     """ The task class that can be awaited and has a future as a private property"""
 
@@ -87,6 +99,27 @@ class Task:
 
     def _set_result(self):
         self._resolve_future(cancelled=False)
+
+    def _set_failed(self, error):
+        """Fail the task with the error reported by the frontend.
+
+        Like the other resolutions, the future is resolved thread-safely
+        on the loop it was created on.
+        """
+        if self._future.done():
+            return
+        loop = self._future.get_loop()
+        exception = TaskFailedError(error)
+
+        def apply():
+            if not self._future.done():
+                self._future.set_exception(exception)
+
+        try:
+            loop.call_soon_threadsafe(apply)
+        except RuntimeError:
+            # The loop is closed: nothing is awaiting the task.
+            pass
 
     def _resolve_future(self, cancelled):
         """Wake up the cell awaiting this task.
@@ -253,6 +286,11 @@ class MoveHubWidget(DOMWidget):
     name = Unicode("device1").tag(sync=True)
     identifier = Unicode("").tag(sync=True)
 
+    @property
+    def connected(self):
+        """Whether the Move Hub is connected."""
+        return bool(self._device_info.get("connected", False))
+
     def __init__(self, *args, **kwargs):
         super(MoveHubWidget, self).__init__(*args, **kwargs)
         self.on_msg(self._handle_custom_comm_msg)
@@ -297,6 +335,9 @@ class MoveHubWidget(DOMWidget):
                 if event == "task-cancelled":
                     task._set_cancelled()
 
+                if event == "task-failed":
+                    task._set_failed(content.get("error", "Unknown error"))
+
             del self._pending_tasks[task_uuid]
     
     def connect(self, identifier = None):
@@ -311,7 +352,7 @@ class MoveHubWidget(DOMWidget):
             identifier = self.identifier
         return self._create_task(task_type="disconnect", data={}) 
 
-    async def _poll(self):
+    async def _poll_frames(self):
         """Wait for the device info to be updated.
 
         The state pushed by the frontend is applied to the trait value
@@ -328,6 +369,25 @@ class MoveHubWidget(DOMWidget):
             if current_frame != last_frame:
                 return
             last_frame = current_frame
+
+    async def _poll(self, timeout=2.5):
+        """Wait for the device info to be updated by the frontend.
+
+        When no fresh frame arrives within the timeout - which happens
+        when the Move Hub is not connected, since device info polling
+        only starts after connecting - a TimeoutError is raised instead
+        of hanging forever.
+        """
+        if timeout is None:
+            await self._poll_frames()
+            return
+        try:
+            await asyncio.wait_for(self._poll_frames(), timeout)
+        except asyncio.TimeoutError:
+            raise TimeoutError(
+                f"No device info was received from the frontend within "
+                f"{timeout} seconds. Is the Move Hub connected?"
+            ) from None
 
     async def get_distance_async(self):
         """Get the distance from an obstacle"""
