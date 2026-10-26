@@ -73,7 +73,18 @@ export class MoveHubModel extends DOMWidgetModel {
     // and every state update stays buffered forever. Custom messages
     // are not throttled.
     // See https://github.com/jupyter-widgets/ipywidgets/issues/4048
-    this.send({ event: 'device-info', data: device_info as any });
+    try {
+      this.send({ event: 'device-info', data: device_info as any });
+    } catch (err) {
+      // The comm is dead (kernel restart or closed comm): no kernel
+      // side remains to receive device info updates, so stop the
+      // polling loop instead of failing on every tick.
+      console.warn(
+        'Stopping device info polling: cannot send to the kernel',
+        err
+      );
+      this.stop_polling = true;
+    }
   }
 
   poll() {
@@ -141,9 +152,12 @@ export class MoveHubModel extends DOMWidgetModel {
             }
 
             // All other commands require a connection
-            /*if (!this.movehub.deviceInfo.connected) {
-              throw new Error('Boost is not connected.');
-            }*/
+            const movehub = this.movehub as MoveHub | undefined;
+            if (movehub === undefined || !movehub.deviceInfo.connected) {
+              throw new Error(
+                'The Move Hub is not connected. Connect it before sending commands.'
+              );
+            }
 
             // Motor and LED tasks are scheduled by the MoveHub: commands
             // targeting overlapping ports are executed in order, commands
@@ -210,7 +224,8 @@ export class MoveHubModel extends DOMWidgetModel {
               task_type: content.task_type
             });
           } catch (err) {
-            if (!(err instanceof TaskCancelledError)) {
+            const isCancelled = err instanceof TaskCancelledError;
+            if (!isCancelled) {
               console.error(
                 'task failed for',
                 content.task_uuid,
@@ -220,14 +235,16 @@ export class MoveHubModel extends DOMWidgetModel {
             }
             try {
               this.send({
-                event: 'task-cancelled',
+                event: isCancelled ? 'task-cancelled' : 'task-failed',
                 task_uuid: content.task_uuid,
                 task_type: content.task_type,
                 error: String(err)
               });
             } catch (e) {
               console.error(
-                'failed to send cancel for',
+                isCancelled
+                  ? 'failed to send cancel for'
+                  : 'failed to send failure of',
                 content.task_uuid,
                 content.task_type,
                 e
