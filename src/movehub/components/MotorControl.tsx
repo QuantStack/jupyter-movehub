@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Poll } from '@lumino/polling';
 import { DeviceInfo } from '../movehub-control/types';
 import { defaultDeviceInfo } from '../moveHub';
-import { IMoveHubPanelWithThemeProps } from './MoveHubPanel';
+import { IMoveHubPanelProps } from './MoveHubPanel';
 import { HubAsync } from '../movehub-control/hub/hubAsync';
 
 export interface IMoveFormProps {
@@ -22,10 +22,12 @@ export interface IMoveFormProps {
 
 export type MotorPort = 'A' | 'B' | 'C' | 'D';
 
-export interface IMotorControlProps extends IMoveHubPanelWithThemeProps {
+export interface IMotorControlProps extends IMoveHubPanelProps {
   port?: MotorPort;
   title?: string;
   subtitle?: string;
+  /** Display the current angle without the controls to operate the motor. */
+  readOnly?: boolean;
 }
 
 export default function MotorControl({
@@ -34,7 +36,8 @@ export default function MotorControl({
   title = `Port ${port}`,
   subtitle = port === 'A' || port === 'B'
     ? 'Integrated Motor'
-    : 'External Motor'
+    : 'External Motor',
+  readOnly = false
 }: IMotorControlProps) {
   const [deviceState, setDeviceState] = useState<DeviceInfo>(defaultDeviceInfo);
   const [angle, setAngle] = useState<string>('45');
@@ -120,50 +123,52 @@ export default function MotorControl({
           </div>
         </div>
 
-        <div className="motor-control-grid">
-          <div className="motor-control-field">
-            <label htmlFor={angleId} className="motor-control-field-label">
-              Angle
-            </label>
-            <div className="motor-control-input">
-              <input
-                id={angleId}
-                type="number"
-                value={angle}
-                onChange={e => setAngle(e.target.value)}
-                onKeyDown={runOnEnter}
-              />
-              <span>°</span>
+        {!readOnly && (
+          <div className="motor-control-grid">
+            <div className="motor-control-field">
+              <label htmlFor={angleId} className="motor-control-field-label">
+                Angle
+              </label>
+              <div className="motor-control-input">
+                <input
+                  id={angleId}
+                  type="number"
+                  value={angle}
+                  onChange={e => setAngle(e.target.value)}
+                  onKeyDown={runOnEnter}
+                />
+                <span>°</span>
+              </div>
             </div>
-          </div>
 
-          <div className="motor-control-field">
-            <label htmlFor={powerId} className="motor-control-field-label">
-              Power
-            </label>
-            <div className="motor-control-input">
-              <input
-                id={powerId}
-                type="number"
-                min={0}
-                max={100}
-                value={power}
-                onChange={e => setPower(e.target.value)}
-                onKeyDown={runOnEnter}
-              />
-              <span>%</span>
+            <div className="motor-control-field">
+              <label htmlFor={powerId} className="motor-control-field-label">
+                Power
+              </label>
+              <div className="motor-control-input">
+                <input
+                  id={powerId}
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={power}
+                  onChange={e => setPower(e.target.value)}
+                  onKeyDown={runOnEnter}
+                />
+                <span>%</span>
+              </div>
             </div>
-          </div>
 
-          <button
-            type="button"
-            className="motor-control-validation-button"
-            onClick={handleRun}
-            disabled={!connected || running}
-          >
-            Run
-          </button>
-        </div>
+            <button
+              type="button"
+              className="motor-control-validation-button"
+              onClick={handleRun}
+              disabled={!connected || running}
+            >
+              Run
+            </button>
+          </div>
+        )}
       </section>
     </section>
   );

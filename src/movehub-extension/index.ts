@@ -169,7 +169,11 @@ const MoveHubControlPanelPlugin: JupyterFrontEndPlugin<void> = {
               const device = (await bluetoothManager.connect(
                 movehubRegistryItem
               )) as MoveHub;
-              createContentForMoveHubPanel(device, themeManager, app);
+              if (device) {
+                createContentForMoveHubPanel(device, themeManager, app);
+              }
+              // Otherwise the user cancelled the device chooser without
+              // selecting a device: nothing is opened.
             } finally {
               dialog.resolve();
             }

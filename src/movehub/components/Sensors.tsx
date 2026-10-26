@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { DeviceInfo } from '../movehub-control/types';
 import { defaultDeviceInfo } from '../moveHub';
 import { Poll } from '@lumino/polling';
-import { IMoveHubPanelWithThemeProps } from './MoveHubPanel';
+import { IMoveHubPanelProps } from './MoveHubPanel';
 import { MOVE_HUB_COLORS } from '../types';
 
 const MAX_DISTANCE = 182;
@@ -45,7 +45,7 @@ function PitchRowYaw({
   );
 }
 
-export default function Sensors({ device }: IMoveHubPanelWithThemeProps) {
+export default function Sensors({ device }: IMoveHubPanelProps) {
   const [deviceState, setDeviceState] = useState<DeviceInfo>(defaultDeviceInfo);
 
   useEffect(() => {
