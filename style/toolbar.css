@@ -26,3 +26,9 @@
 .colored-circle-text {
   font-size: var(--jp-ui-font-size1);
 }
+
+.device-identifier-label {
+  user-select: none;
+  -webkit-user-select: none;
+  margin-right: 2px;
+}

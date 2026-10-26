@@ -38,7 +38,7 @@ const batteryCustomizationLight = {
     darkContrastColor: '#fff',
     lowBatteryColor: 'red',
     fontFamily: 'Helvetica',
-    fontSize: 20,
+    fontSize: 26,
     showPercentage: true // Set to true to show battery percentage
   }
 };
@@ -72,7 +72,7 @@ const batteryCustomizationDark = {
     darkContrastColor: '#fff',
     lowBatteryColor: 'red',
     fontFamily: 'Helvetica',
-    fontSize: 20,
+    fontSize: 26,
     showPercentage: true // Set to true to show battery percentage
   }
 };
@@ -114,7 +114,7 @@ export default function Battery({
           deviceState.connected === true ? (
             <BatteryGauge
               value={deviceState.batteryLevel}
-              width={'50px'}
+              size={40}
               customization={
                 isThemeLight
                   ? batteryCustomizationLight
@@ -132,6 +132,7 @@ export default function Battery({
       deviceState.connected === true ? (
       <BatteryGauge
         value={deviceState.batteryLevel}
+        size={40}
         customization={batteryCustomizationLight}
       />
     ) : (

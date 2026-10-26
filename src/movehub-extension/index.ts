@@ -78,11 +78,11 @@ function createContentForMoveHubPanel(
   );
   main.toolbar.addItem('select-model', new BuildSelectorWidget(device));
   toolbar.addItem('spacer', Toolbar.createSpacerItem());
+  main.toolbar.addItem('device-identifier', new DeviceIdentifierWidget(device));
   main.toolbar.addItem(
     'battery-gauge',
     new BatteryWidget(device, themeManager)
   );
-  main.toolbar.addItem('device-identifier', new DeviceIdentifierWidget(device));
   main.id = 'movehub-control-panel';
   main.title.label = 'Move Hub';
   main.title.closable = true;
