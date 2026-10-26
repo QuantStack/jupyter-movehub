@@ -163,6 +163,55 @@ describe('TaskScheduler', () => {
       await Promise.all([ab.promise, a2.promise]);
       expect(started).toEqual(['A1', 'AB', 'A2']);
     });
+
+    it('makes a B task wait for a queued A+B task blocked behind an A task', async () => {
+      const a1 = deferred();
+      const started: string[] = [];
+
+      scheduler.run(['A'], () => {
+        started.push('A1');
+        return a1.promise;
+      });
+      const ab = scheduler.run(['A', 'B'], () => {
+        started.push('AB');
+        return Promise.resolve();
+      });
+      const b = scheduler.run(['B'], () => {
+        started.push('B');
+        return Promise.resolve();
+      });
+
+      // the A+B task conflicts with the running A task, and the B task
+      // conflicts with the queued A+B task: neither may start yet
+      expect(started).toEqual(['A1']);
+
+      a1.resolve();
+      await Promise.all([ab.promise, b.promise]);
+      expect(started).toEqual(['A1', 'AB', 'B']);
+    });
+
+    it('still runs a C task while an A+B task waits for a busy A task', async () => {
+      const a1 = deferred();
+      const started: string[] = [];
+
+      scheduler.run(['A'], () => {
+        started.push('A1');
+        return a1.promise;
+      });
+      scheduler.run(['A', 'B'], () => {
+        started.push('AB');
+        return Promise.resolve();
+      });
+      const c = scheduler.run(['C'], () => {
+        started.push('C');
+        return Promise.resolve();
+      });
+
+      expect(started.sort()).toEqual(['A1', 'C']);
+
+      a1.resolve();
+      await c.promise;
+    });
   });
 
   describe('cancellation', () => {

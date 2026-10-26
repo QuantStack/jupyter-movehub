@@ -31,10 +31,11 @@ export interface IScheduledJobHandle {
  * Serialize commands that target overlapping ports of the Move Hub.
  *
  * Jobs are kept in a single FIFO queue. A job is started as soon as its
- * port set does not intersect the port set of any currently running job,
- * so commands on disjoint ports (e.g. motor A and motor C) run in
- * parallel while commands on overlapping ports (motor A and the joint
- * A+B motor command) are executed in submission order.
+ * port set does not intersect the port set of any currently running job
+ * or of any earlier job still waiting in the queue, so commands on
+ * disjoint ports (e.g. motor A and motor C) run in parallel while
+ * commands on overlapping ports (motor A and the joint A+B motor
+ * command) are executed in submission order.
  */
 export class TaskScheduler {
   private pending: IScheduledJob[];
@@ -127,10 +128,12 @@ export class TaskScheduler {
     const pending = [...this.pending];
     for (const job of pending) {
       const conflicts = [...job.ports].some(port => busy.has(port));
+      // A blocked job keeps its place in the queue: it reserves its
+      // ports so a later job sharing one of them cannot jump ahead.
+      job.ports.forEach(port => busy.add(port));
       if (!conflicts) {
         this.pending.splice(this.pending.indexOf(job), 1);
         this.start(job);
-        job.ports.forEach(port => busy.add(port));
       }
     }
   }
