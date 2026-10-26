@@ -79,7 +79,10 @@ export class MoveHubModel extends DOMWidgetModel {
       // The comm is dead (kernel restart or closed comm): no kernel
       // side remains to receive device info updates, so stop the
       // polling loop instead of failing on every tick.
-      console.warn('Stopping device info polling: cannot send to the kernel', err);
+      console.warn(
+        'Stopping device info polling: cannot send to the kernel',
+        err
+      );
       this.stop_polling = true;
     }
   }
@@ -239,7 +242,9 @@ export class MoveHubModel extends DOMWidgetModel {
               });
             } catch (e) {
               console.error(
-                isCancelled ? 'failed to send cancel for' : 'failed to send failure of',
+                isCancelled
+                  ? 'failed to send cancel for'
+                  : 'failed to send failure of',
                 content.task_uuid,
                 content.task_type,
                 e
