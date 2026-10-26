@@ -281,7 +281,10 @@ export class Hub {
 
   private parseSensor(data: any) {
     if (!this.ports[data[3]]) {
-      this.log('parseSensor unknown port 0x' + data[3].toString(16));
+      // Notifications can arrive for unregistered ports (e.g. the built-in
+      // tilt sensor reporting without a port info message); log them at
+      // the debug level to avoid flooding the console.
+      this.logDebug('parseSensor unknown port 0x' + data[3].toString(16));
       return;
     }
     switch (this.ports[data[3]].deviceType) {
