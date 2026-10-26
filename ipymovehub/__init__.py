@@ -1,4 +1,13 @@
-from .ipymovehub import LedColor,  MoveHubWidget, Port, Sensor
+from .ipymovehub import (
+    MAX_ANGLE,
+    MAX_POWER,
+    MAX_SECONDS,
+    MIN_POWER,
+    LedColor,
+    MoveHubWidget,
+    Port,
+    Sensor,
+)
 try:
     from ._version import __version__
 except ImportError:

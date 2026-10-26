@@ -150,6 +150,53 @@ class Port(str, Enum):
     D = "D"
 
 
+# The bounds of the arguments are fixed by the Boost Move Hub BLE
+# protocol: durations are sent in milliseconds as an unsigned 16-bit
+# integer, powers as a signed 8-bit integer and angles as an unsigned
+# 32-bit integer.
+MAX_SECONDS = 65.535
+MIN_POWER = -100
+MAX_POWER = 100
+MAX_ANGLE = 2147483647
+
+
+def _validate_port(port):
+    """Normalize and validate a motor port, raising ValueError on an unknown port."""
+    if isinstance(port, Port):
+        return port.value
+    if isinstance(port, str) and port in (p.value for p in Port):
+        return port
+    valid = ", ".join(p.value for p in Port)
+    raise ValueError(f"port must be one of {valid}, got {port!r}")
+
+
+def _validate_power(power, name):
+    """Validate a motor power percentage, raising ValueError when out of bounds."""
+    if not (MIN_POWER <= power <= MAX_POWER):
+        raise ValueError(
+            f"{name} must be between {MIN_POWER} and {MAX_POWER}, got {power}"
+        )
+    return power
+
+
+def _validate_seconds(seconds):
+    """Validate a motor run time in seconds, raising ValueError when out of bounds."""
+    if not (0 <= seconds <= MAX_SECONDS):
+        raise ValueError(
+            f"seconds must be between 0 and {MAX_SECONDS} (protocol limit), got {seconds}"
+        )
+    return seconds
+
+
+def _validate_angle(angle):
+    """Validate a motor angle in degrees, raising ValueError when out of bounds."""
+    if not (0 <= angle <= MAX_ANGLE):
+        raise ValueError(
+            f"angle must be between 0 and {MAX_ANGLE} (protocol limit), got {angle}"
+        )
+    return angle
+
+
 class Sensor(object):
     """
     The sensor on the Boost Move Hub.
@@ -313,12 +360,13 @@ class MoveHubWidget(DOMWidget):
 
             Args:
                 port (Port): The port of the motor.
-                angle (float): The angle in degrees.
-                power (int): The power of the motor.
+                angle (float): The angle in degrees, from `0` to `2147483647`.
+                power (int): The power of the motor, from `-100` to `100`.
 
         """
-        if isinstance(port, Port):
-            port = port.value
+        port = _validate_port(port)
+        _validate_angle(angle)
+        _validate_power(power, "power")
         wait = True
         return self._create_task(task_type="motor-angle", data={"port": port, "angle": angle, "power": power, "wait": wait})
 
@@ -327,11 +375,14 @@ class MoveHubWidget(DOMWidget):
             Turn both motors for a given angle:
 
             Args:
-                angle (float): The angle in degrees.
-                power_a (int): The power of motor A.
-                power_b (int): The power of motor B.
+                angle (float): The angle in degrees, from `0` to `2147483647`.
+                power_a (int): The power of motor A, from `-100` to `100`.
+                power_b (int): The power of motor B, from `-100` to `100`.
             
         """
+        _validate_angle(angle)
+        _validate_power(power_a, "power_a")
+        _validate_power(power_b, "power_b")
         wait = True
         return self._create_task(task_type="motor-angle-multi", data= {"angle": angle, "power_a": power_a, "power_b": power_b, "wait": wait})
 
@@ -341,12 +392,13 @@ class MoveHubWidget(DOMWidget):
             
             Args:
                 port (Port): The port of the motor.
-                seconds (float): The time in seconds.
-                power (int): The power of the motor.
+                seconds (float): The time in seconds, from `0` to `65.535`.
+                power (int): The power of the motor, from `-100` to `100`.
 
         """
-        if isinstance(port, Port):
-            port = port.value
+        port = _validate_port(port)
+        _validate_seconds(seconds)
+        _validate_power(power, "power")
         wait = True
        
         return self._create_task(task_type="motor-time", data={"port": port, "seconds": seconds, "power": power, "wait": wait})
@@ -356,11 +408,14 @@ class MoveHubWidget(DOMWidget):
             Turn both motors for a given time:
 
             Args:
-                seconds (float): The time in seconds.
-                power_a (int): The power of motor A.
-                power_b (int): The power of motor B.
+                seconds (float): The time in seconds, from `0` to `65.535`.
+                power_a (int): The power of motor A, from `-100` to `100`.
+                power_b (int): The power of motor B, from `-100` to `100`.
             
         """
+        _validate_seconds(seconds)
+        _validate_power(power_a, "power_a")
+        _validate_power(power_b, "power_b")
         wait = True
         
         return self._create_task(task_type="motor-time-multi", data={"seconds": seconds, "power_a": power_a, "power_b": power_b, "wait": wait})
