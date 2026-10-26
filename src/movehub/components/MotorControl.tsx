@@ -157,7 +157,7 @@ export default function MotorControl({
 
           <button
             type="button"
-            className="motor-control-validation-button"
+            className="motor-control-validation-button jp-mod-styled jp-mod-accept"
             onClick={handleRun}
             disabled={!connected || running}
           >

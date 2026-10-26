@@ -173,7 +173,7 @@ export default function DualMotorControl({
             ></label>
             <button
               type="button"
-              className="motor-control-validation-button"
+              className="motor-control-validation-button jp-mod-styled jp-mod-accept"
               onClick={handleRunSamePowers}
               disabled={!connected || running}
             >
@@ -232,7 +232,7 @@ export default function DualMotorControl({
               ></label>
               <button
                 type="button"
-                className="motor-control-validation-button"
+                className="motor-control-validation-button jp-mod-styled jp-mod-accept"
                 onClick={handleRunOppositePowers}
                 disabled={!connected || running}
               >

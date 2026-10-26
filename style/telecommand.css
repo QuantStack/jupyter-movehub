@@ -7,46 +7,25 @@
   margin: 10px 0;
 }
 
-.telecommand-button {
-  background-color: transparent;
-  border-width: 0;
-  padding: 0;
+button.jp-mod-styled.telecommand-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 48px;
+  height: 48px;
+  padding: 0;
   cursor: pointer;
 }
 
-.telecommand-button:active {
+button.jp-mod-styled.telecommand-button:active {
   outline: 2px solid var(--jp-accept-color-hover, --jp-brand-color0);
   outline-offset: 2px;
 }
 
-.telecommand-button:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-.telecommand-icon {
+.telecommand-button .telecommand-icon {
   display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
-}
-
-.telecommand-button .telecommand-icon svg {
-  width: 100%;
-  height: 100%;
-  background-color: var(--jp-accept-color-normal, --jp-brand-color1);
-}
-
-.telecommand-button-stop .telecommand-icon svg {
-  width: 100%;
-  height: 100%;
-  background-color: var(--jp-error-color1);
-}
-
-.telecommand-button:hover .telecommand-icon svg {
-  background-color: var(--jp-accept-color-hover, var(--jp-brand-color0));
-}
-
-.telecommand-button-stop:hover .telecommand-icon svg {
-  background-color: var(--jp-error-color0);
 }

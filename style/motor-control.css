@@ -26,7 +26,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  height: 44px;
+  height: 48px;
   padding: 0 12px;
   box-sizing: border-box;
   border: var(--jp-border-width) solid var(--jp-input-border-color);
@@ -61,20 +61,10 @@
   font-size: 12px;
 }
 
-.motor-control-validation-button {
+button.jp-mod-styled.jp-mod-accept.motor-control-validation-button {
   margin-left: auto;
-  height: 44px;
-  padding: 0 22px;
-  border: 0;
-  background: var(--jp-accept-color-normal, --jp-brand-color1);
-  color: var(--jp-accept-color-foreground, white);
-  font-size: 12px;
-  font-weight: 600;
+  height: 48px;
   cursor: pointer;
-}
-
-.motor-control-validation-button:hover {
-  background: var(--jp-accept-color-hover, --jp-brand-color0);
 }
 
 .motor-control-validation-button:disabled {

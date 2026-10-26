@@ -46,25 +46,44 @@ interface IControl {
   label: string;
   action: Action;
   direction: number;
-  className?: string;
+  className: string;
 }
 
 const CONTROLS: IControl[] = [
-  { icon: arrowUpIcon, label: 'Drive forward', action: 'drive', direction: 1 },
-  { icon: turnLeftIcon, label: 'Turn left', action: 'turn', direction: -1 },
+  {
+    icon: arrowUpIcon,
+    label: 'Drive forward',
+    action: 'drive',
+    direction: 1,
+    className: 'jp-mod-accept'
+  },
+  {
+    icon: turnLeftIcon,
+    label: 'Turn left',
+    action: 'turn',
+    direction: -1,
+    className: 'jp-mod-accept'
+  },
   {
     icon: stopIcon,
     label: 'Stop',
     action: 'stop',
     direction: 0,
-    className: 'telecommand-button-stop'
+    className: 'jp-mod-warn'
   },
-  { icon: turnRightIcon, label: 'Turn right', action: 'turn', direction: 1 },
+  {
+    icon: turnRightIcon,
+    label: 'Turn right',
+    action: 'turn',
+    direction: 1,
+    className: 'jp-mod-accept'
+  },
   {
     icon: arrowDownIcon,
     label: 'Drive backward',
     action: 'drive',
-    direction: -1
+    direction: -1,
+    className: 'jp-mod-accept'
   }
 ];
 
@@ -133,7 +152,7 @@ export function Telecommand({ device }: IMoveHubPanelWithThemeProps) {
           <button
             key={control.label}
             type="button"
-            className={['telecommand-button', control.className]
+            className={['telecommand-button jp-mod-styled', control.className]
               .filter(Boolean)
               .join(' ')}
             aria-label={control.label}
