@@ -14,14 +14,16 @@ const PORTS: MotorPort[] = ['A', 'B', 'C', 'D'];
  */
 export default function MoveHubInfo({ moveHub }: { moveHub: MoveHub }) {
   return (
-    <div className="dashboard">
-      <div className="dashboard-row">
-        <DeviceInfoCard device={moveHub} />
-        <Sensors device={moveHub} />
-        <div className="dashboard-ports">
-          {PORTS.map(port => (
-            <MotorControl key={port} device={moveHub} port={port} readOnly />
-          ))}
+    <div className="jp-movehub-widget-view">
+      <div className="dashboard">
+        <div className="dashboard-row">
+          <DeviceInfoCard device={moveHub} />
+          <Sensors device={moveHub} />
+          <div className="dashboard-ports">
+            {PORTS.map(port => (
+              <MotorControl key={port} device={moveHub} port={port} readOnly />
+            ))}
+          </div>
         </div>
       </div>
     </div>
