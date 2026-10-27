@@ -303,6 +303,11 @@ export class MoveHubModel extends DOMWidgetModel {
       } finally {
         dialog.resolve();
       }
+      if (!this.movehub) {
+        // The user cancelled the device chooser without selecting a
+        // device: nothing to connect to.
+        return;
+      }
     } else {
       const selectedDevice = MoveHubModel.bluetoothManager.deviceList.find(
         device => device.native.id === identifier

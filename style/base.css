@@ -11,7 +11,6 @@
 */
 
 /* style/base.css */
-@import url('./device-info-table.css');
 @import url('./dashboard.css');
 @import url('./led-control.css');
 @import url('./motor-control.css');

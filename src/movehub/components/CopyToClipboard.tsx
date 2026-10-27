@@ -10,6 +10,7 @@ export const copyIcon = new LabIcon({
 interface ICopyButtonProps {
   textToCopy: string;
   title?: string;
+  className?: string;
 }
 
 /**
@@ -17,7 +18,8 @@ interface ICopyButtonProps {
  */
 export function CopyButton({
   textToCopy,
-  title = 'Copy ID'
+  title = 'Copy ID',
+  className
 }: ICopyButtonProps) {
   const handleCopyClick = async () => {
     try {
@@ -28,6 +30,7 @@ export function CopyButton({
   };
   return (
     <ToolbarButtonComponent
+      className={className}
       icon={copyIcon}
       onClick={handleCopyClick}
       tooltip={title}
