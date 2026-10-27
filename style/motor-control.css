@@ -67,7 +67,6 @@ button.jp-mod-styled.jp-mod-accept.motor-control-validation-button {
   cursor: pointer;
 }
 
-
 .motor-control-validation-button:disabled {
   opacity: 0.45;
   cursor: not-allowed;
