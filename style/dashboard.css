@@ -10,6 +10,10 @@
   container-type: inline-size;
 }
 
+.jp-movehub-widget-view .dashboard {
+  padding: 0;
+}
+
 .dashboard-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
