@@ -36,19 +36,45 @@ import uuid
 def wait_for_change(widget, value):
     """
     Wait for a change in a widget's value.
+
+    The trait change may be notified from another thread than the one
+    running the event loop awaiting the future (the frontend-to-kernel
+    comm message handling), so the future is resolved thread-safely on
+    the loop it was created on.
     """
     future = asyncio.Future()
 
     def getvalue(change):
-        # make the new value available
-        future.set_result(change.new)
         widget.unobserve(getvalue, value)
+
+        def apply():
+            if not future.done():
+                future.set_result(change.new)
+
+        try:
+            future.get_loop().call_soon_threadsafe(apply)
+        except RuntimeError:
+            # The loop is closed: nothing is awaiting the change.
+            pass
 
     widget.observe(getvalue, value)
     return future
 
+class TaskFailedError(RuntimeError):
+    """
+    Raised when a task fails on the frontend, e.g. when a command is
+    sent while the Move Hub is not connected.
+
+    """
+
+    def __init__(self, error):
+        super().__init__(str(error))
+        self.error = error
+
+
 class Task:
     """ The task class that can be awaited and has a future as a private property"""
+
     def __init__(self, widget, task_uuid, task_type):
         self._future = asyncio.Future()
         self._task_uuid = task_uuid
@@ -69,16 +95,61 @@ class Task:
         self._future.cancel()
 
     def _set_cancelled(self):
-        self._future.cancel()
-      
+        self._resolve_future(cancelled=True)
+
     def _set_result(self):
-        if not self._future.done():
-            self._future.set_result("finished")
+        self._resolve_future(cancelled=False)
+
+    def _set_failed(self, error):
+        """Fail the task with the error reported by the frontend.
+
+        Like the other resolutions, the future is resolved thread-safely
+        on the loop it was created on.
+        """
+        if self._future.done():
+            return
+        loop = self._future.get_loop()
+        exception = TaskFailedError(error)
+
+        def apply():
+            if not self._future.done():
+                self._future.set_exception(exception)
+
+        try:
+            loop.call_soon_threadsafe(apply)
+        except RuntimeError:
+            # The loop is closed: nothing is awaiting the task.
+            pass
+
+    def _resolve_future(self, cancelled):
+        """Wake up the cell awaiting this task.
+
+        The comm message from the frontend may be processed on another
+        thread than the one running the event loop awaiting the task, so
+        the future must be resolved thread-safely on the loop it was
+        created on.
+        """
+        if self._future.done():
+            return
+        loop = self._future.get_loop()
+
+        def apply():
+            if not self._future.done():
+                if cancelled:
+                    self._future.cancel()
+                else:
+                    self._future.set_result("finished")
+
+        try:
+            loop.call_soon_threadsafe(apply)
+        except RuntimeError:
+            # The loop is closed: nothing is awaiting the task.
+            pass
 
     def done(self):
        """ Method returnin True if the task has finished running."""
        return self._future.done()
-    
+
     def cancelled(self):
         """Method returning True if the task was cancelled before completing successfully."""
         return self._future.cancelled()
@@ -110,6 +181,53 @@ class Port(str, Enum):
     AB = "AB"
     C = "C"
     D = "D"
+
+
+# The bounds of the arguments are fixed by the Boost Move Hub BLE
+# protocol: durations are sent in milliseconds as an unsigned 16-bit
+# integer, powers as a signed 8-bit integer and angles as an unsigned
+# 32-bit integer.
+MAX_SECONDS = 65.535
+MIN_POWER = -100
+MAX_POWER = 100
+MAX_ANGLE = 2147483647
+
+
+def _validate_port(port):
+    """Normalize and validate a motor port, raising ValueError on an unknown port."""
+    if isinstance(port, Port):
+        return port.value
+    if isinstance(port, str) and port in (p.value for p in Port):
+        return port
+    valid = ", ".join(p.value for p in Port)
+    raise ValueError(f"port must be one of {valid}, got {port!r}")
+
+
+def _validate_power(power, name):
+    """Validate a motor power percentage, raising ValueError when out of bounds."""
+    if not (MIN_POWER <= power <= MAX_POWER):
+        raise ValueError(
+            f"{name} must be between {MIN_POWER} and {MAX_POWER}, got {power}"
+        )
+    return power
+
+
+def _validate_seconds(seconds):
+    """Validate a motor run time in seconds, raising ValueError when out of bounds."""
+    if not (0 <= seconds <= MAX_SECONDS):
+        raise ValueError(
+            f"seconds must be between 0 and {MAX_SECONDS} (protocol limit), got {seconds}"
+        )
+    return seconds
+
+
+def _validate_angle(angle):
+    """Validate a motor angle in degrees, raising ValueError when out of bounds."""
+    if not (0 <= angle <= MAX_ANGLE):
+        raise ValueError(
+            f"angle must be between 0 and {MAX_ANGLE} (protocol limit), got {angle}"
+        )
+    return angle
 
 
 class Sensor(object):
@@ -159,21 +277,31 @@ class MoveHubWidget(DOMWidget):
     _view_name = Unicode("MoveHubView").tag(sync=True)
     _view_module = Unicode(module_name).tag(sync=True)
     _view_module_version = Unicode(module_version).tag(sync=True)
-    _device_info = Dict(DEFAULT_DEVICE_INFO, read_only=True).tag(sync=True)
+    # The device info is pushed by the frontend over the custom comm
+    # channel and applied through `set_state`; echoing those updates
+    # back to the frontend would be pure overhead.
+    _device_info = Dict(
+        DEFAULT_DEVICE_INFO, read_only=True
+    ).tag(sync=True, echo_update=False)
     name = Unicode("device1").tag(sync=True)
     identifier = Unicode("").tag(sync=True)
+
+    @property
+    def connected(self):
+        """Whether the Move Hub is connected."""
+        return bool(self._device_info.get("connected", False))
 
     def __init__(self, *args, **kwargs):
         super(MoveHubWidget, self).__init__(*args, **kwargs)
         self.on_msg(self._handle_custom_comm_msg)
         self._pending_tasks = {}
-    
+
     def _create_task(self, task_type, data):
         task_uuid = str(uuid.uuid4())
         task_type = task_type
         task = Task(widget = self,task_uuid=task_uuid, task_type=task_type)
         self._pending_tasks[task_uuid] = task
-                              
+
         self.send({
             "event": "start-task",
             "task_uuid": task_uuid,
@@ -181,22 +309,35 @@ class MoveHubWidget(DOMWidget):
             "data": data
         })
         return task
-        
-    # 
+
+    #
     def _handle_custom_comm_msg(self, _,  content, buffers):
         """Private method that handles with the different comm messages received from the frontend"""
         event = content.get("event")
+
+        # The device info is pushed by the frontend as a custom message
+        # instead of the widget state sync (which is throttled to one
+        # in-flight message on some stacks and can stall permanently,
+        # see https://github.com/jupyter-widgets/ipywidgets/issues/4048).
+        if event == "device-info":
+            self.set_state({"_device_info": content.get("data", {})})
+            return
+
         task_uuid = content.get("task_uuid")
         task_type = content.get("task_type")
         task = self._pending_tasks.get(task_uuid)
         
-        if task is not None and not task.done():
-            if event == "task-finished":
-                task._set_result()
-                
-            if event == "task-cancelled":
-                task._set_cancelled()
-                
+        if task is not None:
+            if not task.done():
+                if event == "task-finished":
+                    task._set_result()
+
+                if event == "task-cancelled":
+                    task._set_cancelled()
+
+                if event == "task-failed":
+                    task._set_failed(content.get("error", "Unknown error"))
+
             del self._pending_tasks[task_uuid]
     
     def connect(self, identifier = None):
@@ -211,8 +352,42 @@ class MoveHubWidget(DOMWidget):
             identifier = self.identifier
         return self._create_task(task_type="disconnect", data={}) 
 
-    async def _poll(self):
-        await wait_for_change(self, "_device_info")
+    async def _poll_frames(self):
+        """Wait for the device info to be updated.
+
+        The state pushed by the frontend is applied to the trait value
+        even when trait change notifications are suppressed (which can
+        happen on some kernels when a `hold_trait_notifications` context
+        is left dangling by a cancelled comm message task), so the frame
+        counter is polled directly instead of relying on trait
+        observers.
+        """
+        last_frame = self._device_info.get("polling_frame")
+        while True:
+            await asyncio.sleep(1 / 60)
+            current_frame = self._device_info.get("polling_frame")
+            if current_frame != last_frame:
+                return
+            last_frame = current_frame
+
+    async def _poll(self, timeout=2.5):
+        """Wait for the device info to be updated by the frontend.
+
+        When no fresh frame arrives within the timeout - which happens
+        when the Move Hub is not connected, since device info polling
+        only starts after connecting - a TimeoutError is raised instead
+        of hanging forever.
+        """
+        if timeout is None:
+            await self._poll_frames()
+            return
+        try:
+            await asyncio.wait_for(self._poll_frames(), timeout)
+        except asyncio.TimeoutError:
+            raise TimeoutError(
+                f"No device info was received from the frontend within "
+                f"{timeout} seconds. Is the Move Hub connected?"
+            ) from None
 
     async def get_distance_async(self):
         """Get the distance from an obstacle"""
@@ -245,12 +420,13 @@ class MoveHubWidget(DOMWidget):
 
             Args:
                 port (Port): The port of the motor.
-                angle (float): The angle in degrees.
-                power (int): The power of the motor.
+                angle (float): The angle in degrees, from `0` to `2147483647`.
+                power (int): The power of the motor, from `-100` to `100`.
 
         """
-        if isinstance(port, Port):
-            port = port.value
+        port = _validate_port(port)
+        _validate_angle(angle)
+        _validate_power(power, "power")
         wait = True
         return self._create_task(task_type="motor-angle", data={"port": port, "angle": angle, "power": power, "wait": wait})
 
@@ -259,11 +435,14 @@ class MoveHubWidget(DOMWidget):
             Turn both motors for a given angle:
 
             Args:
-                angle (float): The angle in degrees.
-                power_a (int): The power of motor A.
-                power_b (int): The power of motor B.
+                angle (float): The angle in degrees, from `0` to `2147483647`.
+                power_a (int): The power of motor A, from `-100` to `100`.
+                power_b (int): The power of motor B, from `-100` to `100`.
             
         """
+        _validate_angle(angle)
+        _validate_power(power_a, "power_a")
+        _validate_power(power_b, "power_b")
         wait = True
         return self._create_task(task_type="motor-angle-multi", data= {"angle": angle, "power_a": power_a, "power_b": power_b, "wait": wait})
 
@@ -273,12 +452,13 @@ class MoveHubWidget(DOMWidget):
             
             Args:
                 port (Port): The port of the motor.
-                seconds (float): The time in seconds.
-                power (int): The power of the motor.
+                seconds (float): The time in seconds, from `0` to `65.535`.
+                power (int): The power of the motor, from `-100` to `100`.
 
         """
-        if isinstance(port, Port):
-            port = port.value
+        port = _validate_port(port)
+        _validate_seconds(seconds)
+        _validate_power(power, "power")
         wait = True
        
         return self._create_task(task_type="motor-time", data={"port": port, "seconds": seconds, "power": power, "wait": wait})
@@ -288,11 +468,14 @@ class MoveHubWidget(DOMWidget):
             Turn both motors for a given time:
 
             Args:
-                seconds (float): The time in seconds.
-                power_a (int): The power of motor A.
-                power_b (int): The power of motor B.
+                seconds (float): The time in seconds, from `0` to `65.535`.
+                power_a (int): The power of motor A, from `-100` to `100`.
+                power_b (int): The power of motor B, from `-100` to `100`.
             
         """
+        _validate_seconds(seconds)
+        _validate_power(power_a, "power_a")
+        _validate_power(power_b, "power_b")
         wait = True
         
         return self._create_task(task_type="motor-time-multi", data={"seconds": seconds, "power_a": power_a, "power_b": power_b, "wait": wait})

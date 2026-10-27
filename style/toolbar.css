@@ -1,6 +1,6 @@
 .colored-circle {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -25,4 +25,10 @@
 
 .colored-circle-text {
   font-size: var(--jp-ui-font-size1);
+}
+
+.device-identifier-label {
+  user-select: none;
+  -webkit-user-select: none;
+  margin-right: 2px;
 }

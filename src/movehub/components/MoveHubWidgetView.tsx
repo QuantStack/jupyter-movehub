@@ -1,7 +1,7 @@
 import React from 'react';
 import { IBluetoothManager } from '@jupyter-bluetooth-manager/bluetooth';
 import { MoveHubList } from './MoveHubList';
-import { DeviceInfoTable } from './DeviceInfoTable';
+import MoveHubInfo from './MoveHubInfo';
 import { MoveHub } from '../moveHub';
 
 interface IMoveHubViewProps {
@@ -28,7 +28,7 @@ export default function MoveHubWidgetView({
             <MoveHubList bluetoothManager={bluetoothManager} />
           </>
         ) : (
-          <DeviceInfoTable moveHub={moveHub} />
+          <MoveHubInfo moveHub={moveHub} />
         )}
       </>
     );
@@ -41,7 +41,7 @@ export default function MoveHubWidgetView({
             method on your widget instance.
           </div>
         ) : (
-          <DeviceInfoTable moveHub={moveHub} />
+          <MoveHubInfo moveHub={moveHub} />
         )}
       </>
     );

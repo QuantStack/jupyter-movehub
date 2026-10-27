@@ -93,3 +93,8 @@
 .mod-spread {
   width: 220px;
 }
+
+.tilt-sensor-row > .dashboard-card-text {
+  justify-self: end;
+  text-align: right;
+}
