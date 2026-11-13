@@ -10,6 +10,7 @@ import { MoveHubLed } from './MoveHubLed';
 import DualMotorControl from './DualMotorControl';
 import { Telecommand } from './Telecommand';
 import { VernieLed } from './VernieLed';
+import { R2D2Led } from './R2D2Led';
 import { MotorPort } from './MotorControl';
 
 export interface IMoveHubPanelProps {
@@ -29,7 +30,7 @@ export interface IBuildProps {
   themeManager: IThemeManager;
 }
 
-type Build = 'Move Hub' | 'Vernie';
+type Build = 'Move Hub' | 'Vernie' | 'R2D2';
 
 interface IBuildConfig {
   Component: React.FC<IMoveHubPanelWithThemeProps>;
@@ -65,6 +66,17 @@ const BUILDS: Record<Build, IBuildConfig> = {
     },
     telecommand: true,
     ports: ['A', 'B', 'D']
+  },
+  R2D2: {
+    Component: R2D2Led,
+    dual: {
+      label1: 'Drive forward or backward',
+      label2: 'Turn',
+      validation1: 'Translate',
+      validation2: 'Rotate'
+    },
+    telecommand: true,
+    ports: ['A', 'B', 'D']
   }
 };
 
@@ -89,7 +101,7 @@ export function Dashboard({
         <Sensors {...props} />
         <Component {...props} />
         <DualMotorControl {...props} {...dual} />
-        {telecommand && <Telecommand {...props} />}
+        {telecommand && <Telecommand {...props} build={Build} />}
         {ports.map(port => (
           <MotorControl key={port} {...props} port={port} />
         ))}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { HTMLSelect, ReactWidget } from '@jupyterlab/ui-components';
 import { MoveHub } from '../moveHub';
 
-const Models = ['Move Hub', 'Vernie'];
+const models = ['Move Hub', 'Vernie', 'R2D2'];
 interface IMoveHubPanel {
   device: MoveHub;
 }
@@ -24,7 +24,7 @@ export function BuildSelector({ device }: IMoveHubPanel) {
       <option value="" selected hidden>
         Build
       </option>
-      {Models.map(model => (
+      {models.map(model => (
         <option key={model} value={model}>
           {model}
         </option>
