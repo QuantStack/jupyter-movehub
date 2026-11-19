@@ -2,7 +2,6 @@ import React from 'react';
 import { useEffect, useState, useRef } from 'react';
 import { Poll } from '@lumino/polling';
 import { MoveHub } from '../moveHub';
-import { IMoveHubPanelWithThemeProps } from './MoveHubPanel';
 import { LabIcon } from '@jupyterlab/ui-components';
 import stopSvgStr from '../../../style/icons/stop.svg';
 import arrowUpSvgStr from '../../../style/icons/arrow-up.svg';
@@ -30,12 +29,6 @@ export const turnLeftIcon = new LabIcon({
   name: 'movehub:turn-left',
   svgstr: turnLeftSvgStr
 });
-
-const LONG_PRESS_THRESHOLD = 1000;
-
-export interface IMoveHubControlProps {
-  device: MoveHub;
-}
 
 type Action = 'drive' | 'turn' | 'stop';
 
@@ -85,7 +78,32 @@ const CONTROLS: IControl[] = [
   }
 ];
 
-export function Telecommand({ device }: IMoveHubPanelWithThemeProps) {
+const MOVES = {
+  Vernie: {
+    drive: { tap: 20, hold: 3600 },
+    turn: { tap: 90, hold: 3600 },
+    shortPressLabel: 'Short press: drive about 20 cm or turn 90°',
+    longPressLabel: 'Long press (over 1 s): keep moving',
+    longPressThreshold: 1000
+  },
+  R2D2: {
+    drive: { tap: 0, hold: 3600 },
+    turn: { tap: 0, hold: 3600 },
+    shortPressLabel: '',
+    longPressLabel:
+      'Press to drive R2D2 (continuous move), stop with red button',
+    longPressThreshold: 10
+  }
+} as const;
+
+type TelecommandBuild = keyof typeof MOVES;
+
+interface ITelecommandProps {
+  device: MoveHub;
+  build: TelecommandBuild;
+}
+
+export function Telecommand({ device, build }: ITelecommandProps) {
   const pressStart = useRef(0);
   const [connected, setConnected] = useState(
     device.deviceInfo?.connected === true
@@ -119,15 +137,26 @@ export function Telecommand({ device }: IMoveHubPanelWithThemeProps) {
       device.stop();
       return;
     }
-    const longPress = Date.now() - pressStart.current >= LONG_PRESS_THRESHOLD;
+    const longPress =
+      Date.now() - pressStart.current >=
+      MOVES[build as TelecommandBuild].longPressThreshold;
     try {
+      const moves = MOVES[build as TelecommandBuild];
+      if (!moves) {
+        console.warn(`No move config for build "${build}"`);
+        return;
+      }
+
       if (action === 'drive') {
         await (longPress
           ? device.hub.driveToDirection(direction)
-          : device.hub.drive(20 * direction));
-      } else {
-        await device.hub.turn((longPress ? 3600 : 90) * direction);
+          : device.hub.drive(moves.drive.tap * direction));
+        return;
       }
+
+      await device.hub.turn(
+        (longPress ? moves.turn.hold : moves.turn.tap) * direction
+      );
     } catch (e) {
       console.error(`${action} failed:`, e);
     }
@@ -141,12 +170,11 @@ export function Telecommand({ device }: IMoveHubPanelWithThemeProps) {
           Connect a device to use the controls
         </div>
       )}
-      <div className="dashboard-card-muted">
-        Short press: drive 20 cm or turn 90°
-      </div>
-      <div className="dashboard-card-muted">
-        Long press (over 1 s): keep moving
-      </div>
+      {build !== 'R2D2' && (
+        <div className="dashboard-card-muted">
+          {MOVES[build as TelecommandBuild].shortPressLabel}
+        </div>
+      )}
 
       <div className="telecommand-grid">
         {CONTROLS.map(control => (
